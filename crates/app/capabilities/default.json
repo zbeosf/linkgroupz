@@ -1,0 +1,8 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "앱의 화면(ui/ 의 페이지)이 쓰는 권한. 미리보기 창의 웹 페이지(외부 주소)는 여기에 없으므로 앱의 기능을 부를 수 없다.",
+  "windows": ["manager", "menubar", "settings", "welcome", "whatsnew", "update"],
+  "webviews": ["preview-bar", "browser-*-bar"],
+  "permissions": ["core:default", "core:window:allow-start-dragging"]
+}

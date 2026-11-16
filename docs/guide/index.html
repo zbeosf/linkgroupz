@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LinkGroupz 사용법</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #1d1d1f;
+    --muted: #6e6e73;
+    --line: #e5e5ea;
+    --card: #f5f5f7;
+    --accent: #0a66d8;
+    --warn-bg: #fff6e5;
+    --warn-line: #f0b955;
+    --code-bg: #eef0f3;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e;
+      --fg: #f2f2f7;
+      --muted: #a1a1a6;
+      --line: #38383a;
+      --card: #2c2c2e;
+      --accent: #4c9bff;
+      --warn-bg: #3a2f1a;
+      --warn-line: #b8862f;
+      --code-bg: #2f3136;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font: 16px/1.7 -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", sans-serif;
+    word-break: keep-all;
+  }
+  .layout { display: flex; max-width: 1180px; margin: 0 auto; }
+  nav {
+    position: sticky; top: 0; align-self: flex-start;
+    width: 230px; flex: none; height: 100vh; overflow-y: auto;
+    padding: 32px 16px 32px 24px; border-right: 1px solid var(--line);
+    font-size: 14px;
+  }
+  nav .brand { font-weight: 700; font-size: 17px; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+  nav .lang { margin: -10px 0 14px; font-size: 13px; color: var(--muted); }
+  nav .lang a { display: inline; padding: 0; color: var(--accent); }
+  nav ol { list-style: none; margin: 0; padding: 0; }
+  nav li { margin: 2px 0; }
+  nav a { color: var(--muted); text-decoration: none; display: block; padding: 4px 8px; border-radius: 6px; }
+  nav a:hover { background: var(--card); color: var(--fg); }
+  nav .sub a { padding-left: 20px; font-size: 13px; }
+  main { flex: 1; min-width: 0; padding: 40px 48px 80px; max-width: 900px; }
+  h1 { font-size: 32px; margin: 0 0 6px; }
+  h2 { font-size: 24px; margin: 56px 0 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+  h3 { font-size: 18px; margin: 32px 0 8px; }
+  p { margin: 8px 0; }
+  .lead { color: var(--muted); font-size: 17px; margin-bottom: 24px; }
+  a { color: var(--accent); }
+  code, kbd {
+    font: 13.5px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+    background: var(--code-bg); padding: 2px 6px; border-radius: 5px;
+  }
+  pre { background: var(--code-bg); padding: 12px 14px; border-radius: 8px; overflow-x: auto; }
+  pre code { background: none; padding: 0; }
+  figure { margin: 18px 0 24px; }
+  figure img {
+    display: block; max-width: 100%; height: auto;
+    border-radius: 10px; border: 1px solid var(--line);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, .12);
+  }
+  figure.small img { max-width: 420px; }
+  figure.medium img { max-width: 620px; }
+  figcaption { color: var(--muted); font-size: 14px; margin-top: 8px; }
+  ol.steps { padding-left: 22px; }
+  ol.steps li { margin: 6px 0; }
+  .callout {
+    background: var(--warn-bg); border-left: 4px solid var(--warn-line);
+    padding: 12px 16px; border-radius: 8px; margin: 16px 0;
+  }
+  .tip { background: var(--card); border-left: 4px solid var(--accent); padding: 12px 16px; border-radius: 8px; margin: 16px 0; }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 15px; }
+  th, td { border-bottom: 1px solid var(--line); text-align: left; padding: 8px 10px; vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; }
+  .features { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 18px 0; }
+  .features div { background: var(--card); border-radius: 10px; padding: 14px 16px; }
+  .features b { display: block; margin-bottom: 4px; }
+  .features span { color: var(--muted); font-size: 14px; }
+  @media (max-width: 860px) {
+    .layout { display: block; }
+    nav { position: static; width: auto; height: auto; border-right: none; border-bottom: 1px solid var(--line); padding: 20px 16px; }
+    main { padding: 24px 16px 60px; }
+    figure.small img, figure.medium img { max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+<nav>
+  <div class="brand">📂 LinkGroupz</div>
+  <p class="lang"><b>한국어</b> · <a href="en/index.html">English</a></p>
+  <ol>
+    <li><a href="#intro">소개</a></li>
+    <li><a href="#install">설치</a></li>
+    <li><a href="#setup">처음 세팅</a></li>
+    <li class="sub"><a href="#setup-extension">확장 설치 (Chrome · Edge · Whale)</a></li>
+    <li class="sub"><a href="#setup-permissions">허용할 것</a></li>
+    <li><a href="#use">사용법</a></li>
+    <li class="sub"><a href="#use-menubar">메뉴바</a></li>
+    <li class="sub"><a href="#use-manager">관리 창</a></li>
+    <li class="sub"><a href="#use-preview">미리보기</a></li>
+    <li class="sub"><a href="#use-edit">목록 편집 · 이동</a></li>
+    <li class="sub"><a href="#use-archive">보관함</a></li>
+    <li class="sub"><a href="#use-browser">그룹별 브라우저 (Chrome · Edge · Whale)</a></li>
+    <li class="sub"><a href="#use-import-tabs">열린 탭 가져오기</a></li>
+    <li class="sub"><a href="#use-import-groups">탭 그룹 가져오기</a></li>
+    <li class="sub"><a href="#use-search">검색</a></li>
+    <li><a href="#settings">설정</a></li>
+    <li><a href="#update">자동 업데이트</a></li>
+    <li><a href="#data">데이터 · 업데이트 · 삭제</a></li>
+    <li><a href="#faq">자주 묻는 문제</a></li>
+  </ol>
+</nav>
+
+<main>
+<h1>LinkGroupz 사용법</h1>
+<p class="lead">자주 여는 웹 페이지를 그룹으로 모아 두고, 메뉴바(Windows 는 트레이)에서 그룹 하나를 Chrome · Edge · Whale 에 한 번에 열거나 페이지 하나만 골라 여는 앱입니다.</p>
+<div class="callout">이 문서의 그림은 LinkGroupz(macOS) 화면입니다. Windows 에서는 메뉴바 대신 작업 표시줄 트레이, 데이터 폴더는 <code>%APPDATA%\LinkGroupz</code>, 확장 폴더는 <code>%APPDATA%\LinkGroupz\chrome-extension</code> 입니다. 설치 방법은 INSTALL.ko.md 를 보세요.</div>
+
+<section id="intro">
+<h2>소개</h2>
+<div class="features">
+  <div><b>그룹 · 페이지 관리</b><span>그룹마다 색(19가지) · 아이콘 · 태그, 페이지마다 alias(표시 이름)를 붙입니다.</span></div>
+  <div><b>Chrome · Edge · Whale 에서 한 번에 열기</b><span>그룹 이름 · 색이 붙은 탭 그룹으로 엽니다. 그룹마다 여는 브라우저를 정합니다.</span></div>
+  <div><b>열린 탭 · 탭 그룹 가져오기</b><span>지금 열린 탭이나 탭 그룹을 골라 그대로 저장합니다.</span></div>
+  <div><b>미리보기</b><span>브라우저를 열지 않고 페이지를 옆에서 확인합니다.</span></div>
+  <div><b>검색</b><span>그룹 이름 · <code>#태그</code> · alias · URL 로 찾습니다.</span></div>
+  <div><b>목록 편집</b><span>체크해서 한꺼번에 삭제 · 다른 그룹으로 이동, 끌어서 순서 변경.</span></div>
+</div>
+<p>macOS 13(Ventura) 이상의 <b>Apple Silicon(M1 이후) Mac</b> 또는 Windows 10 · 11(64비트), 그리고 Google Chrome · Microsoft Edge · Naver Whale 중 하나가 필요합니다. Intel Mac 에서는 실행되지 않습니다.</p>
+</section>
+
+<section id="install">
+<h2>설치</h2>
+<ol class="steps">
+  <li>받은 <code>LinkGroupz-x.y.z.dmg</code> 를 더블클릭해 엽니다.</li>
+  <li>열린 창에서 <b>LinkGroupz</b> 아이콘을 <b>Applications</b> 폴더로 끌어다 놓습니다.</li>
+  <li>응용 프로그램 폴더에서 LinkGroupz 를 엽니다.</li>
+</ol>
+
+<h3 id="install-gatekeeper">처음 열 때 보안 경고가 뜨면</h3>
+<p>Apple 의 공증을 받지 않은 앱이라, 처음 열 때 macOS 가 <i>‘LinkGroupz’을(를) 열지 않음</i> 창으로 막습니다. <b>‘완료’</b>를 누른 뒤 다음 순서로 한 번만 허용하면 됩니다. <b>‘휴지통으로 이동’은 누르지 마세요.</b></p>
+<figure class="small">
+  <img src="images/10-gatekeeper.png" alt="‘LinkGroupz’을(를) 열지 않음 macOS 경고 창">
+  <figcaption>처음 열 때 뜨는 macOS 경고. ‘완료’를 누릅니다.</figcaption>
+</figure>
+<ol class="steps">
+  <li><b>시스템 설정 → 개인정보 보호 및 보안</b>을 엽니다.</li>
+  <li>아래쪽 <b>보안</b> 항목의 <i>Mac을 보호하기 위해 ‘LinkGroupz’을(를) 차단했습니다.</i> 옆 <b>그래도 열기</b>를 누릅니다.</li>
+  <li>Mac 암호(또는 Touch ID)를 넣고, 다시 뜨는 창에서 <b>그래도 열기</b>를 누릅니다. 이 항목은 경고 창이 뜬 뒤 한 시간쯤만 보이니, 안 보이면 앱을 한 번 더 열어 보세요.</li>
+</ol>
+<figure>
+  <img src="images/11-open-anyway.png" alt="시스템 설정의 개인정보 보호 및 보안 화면에 있는 그래도 열기 버튼">
+  <figcaption>시스템 설정 → 개인정보 보호 및 보안 → 보안 의 ‘그래도 열기’</figcaption>
+</figure>
+<div class="tip">터미널을 쓴다면 아래 명령 한 줄로 같은 일을 할 수 있습니다. 앱을 Applications 로 옮긴 뒤 실행하세요.
+<pre><code>xattr -dr com.apple.quarantine /Applications/LinkGroupz.app</code></pre></div>
+</section>
+
+<section id="setup">
+<h2>처음 세팅</h2>
+<p>앱을 처음 열면 관리 창과 <b>시작 안내</b> 창이 뜹니다. 시작 안내 창은 메뉴바의 LinkGroupz 아이콘(카드 세 장) → <b>안내</b>로 언제든 다시 열 수 있습니다. 재부팅해도 자동으로 켜지게 하려면 <a href="#settings">설정</a>의 <b>로그인할 때 자동으로 실행</b>을 켜세요.</p>
+<figure class="medium">
+  <img src="images/01-welcome.png" alt="LinkGroupz 시작하기 안내 창">
+  <figcaption>시작 안내 창. 확장이 설치되면 오른쪽에 ‘확장 설치됨’이 표시됩니다.</figcaption>
+</figure>
+
+<h3 id="setup-extension">확장 설치 (권장)</h3>
+<p>확장이 없어도 앱은 동작하지만, 설치하면 다음이 가능해집니다.</p>
+<ul>
+  <li>그룹을 <b>이름 · 색이 붙은 탭 그룹</b>으로 열기 (없으면 새 창에 모두 엽니다)</li>
+  <li>브라우저의 <b>탭 그룹을 그대로 가져오기</b></li>
+  <li>탭 가져오기를 할 때 <b>브라우저 창을 건드리지 않음</b></li>
+</ul>
+<ol class="steps">
+  <li>Chrome 주소창에 <code>chrome://extensions</code> 를 입력합니다. (시작 안내 창의 버튼으로 복사할 수 있습니다)</li>
+  <li>오른쪽 위 <b>개발자 모드</b>를 켭니다.</li>
+  <li><b>압축해제된 확장 프로그램 로드</b>를 누르고 아래 폴더를 고릅니다.<br>
+      <code>~/Library/Application Support/LinkGroupz/chrome-extension</code><br>
+      시작 안내 창의 <b>확장 폴더 Finder 에서 보기</b>를 누르면 이 폴더가 열립니다. 폴더 고르는 창에서 <kbd>⌘</kbd><kbd>⇧</kbd><kbd>G</kbd> 를 누르고 위 경로를 붙여 넣어도 됩니다.</li>
+  <li>시작 안내 창이 <b>확장 설치됨</b>으로 바뀌면 끝입니다.</li>
+</ol>
+<p><b>Edge</b> · <b>Whale</b> 도 쓰면 같은 폴더를 그 브라우저에도 넣습니다. 확장은 브라우저마다 따로 감지합니다.</p>
+<ul>
+  <li>Edge: 주소창에 <code>edge://extensions</code> → <b>개발자 모드</b> 켜기 → <b>압축을 푼 확장 로드</b> → 같은 폴더 선택</li>
+  <li>Whale: 주소창에 <code>whale://extensions</code> → <b>개발자 모드</b> 켜기 → <b>압축해제 된 확장앱 설치</b> → 같은 폴더 선택</li>
+</ul>
+<div class="callout">앱을 새 버전으로 업데이트한 뒤에는 확장을 넣은 브라우저의 확장 페이지(<code>chrome://extensions</code> · <code>edge://extensions</code> · <code>whale://extensions</code>)의 <b>LinkGroupz Tab Groups</b> 카드에서 새로고침(⟳) 버튼을 한 번 눌러 주세요.</div>
+
+<h3 id="setup-permissions">macOS 가 물어보면 허용할 것</h3>
+<table>
+  <tr><th>물어보는 창</th><th>언제</th><th>누를 것</th></tr>
+  <tr><td>‘LinkGroupz’이(가) ‘Google Chrome’(또는 ‘Microsoft Edge’ · ‘Whale’)을 제어하려고 합니다</td><td>확장 없이 열린 탭 가져오기를 그 브라우저에서 처음 할 때</td><td>허용</td></tr>
+  <tr><td>키체인에서 LinkGroupz이(가) ‘LinkGroupz 미리보기 로그인 쿠키’에 저장된 비밀 정보를 사용하려고 합니다 (macOS 버전에 따라 ‘… 키 접근을 허용하고자 합니다’)</td><td>미리보기를 처음 열 때, 설정에서 <b>저장된 로그인 확인</b>을 누를 때 (앱을 업데이트하면 다시 물을 수 있습니다)</td><td>Mac 로그인 암호 입력 후 <b>항상 허용</b></td></tr>
+</table>
+<figure class="medium">
+  <img src="images/09-keychain.png" alt="키체인 접근 허용 창">
+  <figcaption>미리보기 로그인 정보를 키체인에 보관할 때 한 번 묻습니다. Mac 로그인 암호를 넣고 ‘항상 허용’.</figcaption>
+</figure>
+</section>
+
+<section id="use">
+<h2>사용법</h2>
+
+<h3 id="use-menubar">메뉴바에서 바로 열기</h3>
+<p>화면 위 메뉴바의 LinkGroupz 아이콘(카드 세 장)을 누르면 그룹 목록이 뜹니다.</p>
+<ul>
+  <li><b>그룹 카드 클릭</b> → 그룹의 페이지를 모두 그 그룹의 브라우저(카드 오른쪽 끝 Chrome · Edge · Whale 아이콘)에서 엽니다. 아이콘 왼쪽 숫자는 페이지 수입니다.</li>
+  <li><b>›</b> 로 펼친 뒤 <b>페이지 클릭</b> → 그 페이지만 엽니다. 펼친 그룹은 다시 <b>⌄</b> 를 누르거나 검색창 옆 <b>모두 접기</b>로 접습니다.</li>
+  <li><a href="#use-sections">섹션</a>은 관리 창과 같은 순서로 나옵니다. 섹션 이름을 누르면 접고 펼칩니다.</li>
+  <li>맨 위 검색창에 입력하면 바로 걸러지고, 맞는 글자가 강조됩니다.</li>
+  <li><b>키보드로 고르기</b>: 창이 열리면 <kbd>↓</kbd> <kbd>↑</kbd> 로 섹션 · 그룹 · 페이지를 고르고 <kbd>Enter</kbd> 로 엽니다. <kbd>→</kbd> 는 그룹 · 섹션 펼치기, <kbd>←</kbd> 는 접기입니다. 검색어를 입력하면 맨 위 결과가 골라져 있어 바로 <kbd>Enter</kbd> 로 열 수 있습니다. <kbd>Tab</kbd> 은 고른 줄의 오른쪽 클릭 메뉴를 엽니다(메뉴 안에서도 <kbd>↑</kbd> <kbd>↓</kbd> · <kbd>Enter</kbd>). <kbd>Esc</kbd> 는 검색어를 지우고, 한 번 더 누르면 창을 닫습니다.</li>
+  <li><b>오른쪽 클릭</b>: 섹션 · 그룹 · 페이지를 오른쪽 클릭하면 관리 창과 같은 메뉴가 나옵니다. 편집 · 페이지 추가 · 미리보기 · 삭제처럼 입력이나 확인이 필요한 항목은 관리 창을 열어 이어서 합니다.</li>
+  <li><b>끌어서 옮기기</b>: 그룹 · 섹션 · 페이지를 끌어 순서를 바꾸고, 그룹을 섹션 머리줄에 놓으면 섹션에 넣습니다. 페이지를 다른 그룹 위에 놓으면 그 그룹으로 옮깁니다.</li>
+  <li><b>창 크기</b>: 창 가장자리를 끌면 크기가 바뀌고, 바꾼 크기로 계속 엽니다. 원래대로 하려면 아래쪽 📌 버튼 → <b>창 크기 원래대로</b>.</li>
+  <li><b>메뉴바에서 떼어 놓기</b>: 아래쪽 📌 버튼 → <b>메뉴바에서 떼어 놓기</b>. 떼어 놓은 창은 다른 곳을 눌러도 닫히지 않고, 맨 위 띠나 검색창 둘레를 끌어 원하는 곳에 둘 수 있습니다(다음에도 그 자리에 뜹니다). 그룹을 열어도 그대로 남습니다. 📌 → <b>메뉴바에 붙이기</b>로 되돌립니다.</li>
+  <li>아래쪽 버튼: <b>관리</b>(관리 창) · <b>설정</b> · <b>안내</b>(시작 안내 창) · 📌(떼어 놓기 · 창 크기) · <b>종료</b></li>
+</ul>
+<figure class="small">
+  <img src="images/02-menubar.png" alt="메뉴바 창에서 그룹을 펼쳐 페이지 목록을 본 모습">
+  <figcaption>메뉴바 창. 페이지 앞에는 사이트 아이콘이 붙습니다.</figcaption>
+</figure>
+
+<h3 id="use-manager">관리 창</h3>
+<p>처음 켤 때 열리고, 그 뒤에는 메뉴바 창 아래 <b>관리</b> 버튼이나 Dock 아이콘으로 엽니다. 앱을 켤 때마다 관리 창을 열려면 설정 → <b>앱을 켤 때 여는 창</b>을 <b>관리 창</b>으로 바꿉니다 (기본은 메뉴바 창). 이미 켜져 있을 때 응용 프로그램 폴더에서 LinkGroupz 를 다시 열어도 관리 창이 앞으로 옵니다. (로그인할 때 자동으로 켜진 경우는 열리지 않습니다) 왼쪽은 섹션과 그룹 카드, 오른쪽은 선택한 그룹의 페이지입니다. 오른쪽 아래에 지금 버전과 <b>설정</b> 버튼이 있습니다.</p>
+<p>왼쪽 목록은 검색창 오른쪽 ▥ 버튼으로 숨기고, 숨긴 뒤에는 그룹 화면 왼쪽 위의 같은 버튼으로 다시 엽니다.</p>
+<figure>
+  <img src="images/03-manager.png" alt="관리 창. 왼쪽 그룹 목록과 오른쪽 페이지 목록">
+  <figcaption>관리 창</figcaption>
+</figure>
+<table>
+  <tr><th>하고 싶은 일</th><th>방법</th></tr>
+  <tr><td>새 그룹</td><td>왼쪽 검색창 아래 <b>새 그룹</b>, 또는 그룹 목록 오른쪽 클릭 → <b>새 그룹 만들기</b></td></tr>
+  <tr><td>그룹 이름 · 색 · 아이콘 · 태그 바꾸기</td><td>그룹 이름 옆 연필 ✎. 아이콘은 기본 모양 40가지(폴더 · 코드 · 서버 · DB · 그래프 등) 중에서 고르거나 <b>이미지 파일 선택</b>으로 내 이미지를 넣습니다. 내 이미지는 가운데를 정사각형으로 잘라 앱 데이터 폴더에 복사해 두므로 원본을 지워도 남습니다. 색은 19가지이고, Chrome 탭 그룹은 9가지 색만 있어 앱 전용 색(남색 · 민트 · 코랄 등)은 가장 가까운 Chrome 색으로 열립니다</td></tr>
+  <tr><td>페이지 추가</td><td><b>페이지 추가</b> → URL · alias (alias 를 비우면 주소로 표시)</td></tr>
+  <tr><td>그룹 전체 열기</td><td><b>그룹 열기</b>, 또는 왼쪽 그룹 목록에서 그룹 더블클릭</td></tr>
+  <tr><td>페이지 열기</td><td>페이지 더블클릭, 또는 우클릭 → <b>열기</b></td></tr>
+  <tr><td>새 창으로 열기</td><td>그룹 · 페이지 우클릭 → <b>새 창으로 열기</b>. 브라우저가 이미 떠 있어도 지금 창에 더하지 않고 새 창을 띄웁니다 (확장이 있으면 새 창에서 탭 그룹으로)</td></tr>
+  <tr><td>시크릿 모드로 열기</td><td>그룹 · 페이지 우클릭 → <b>시크릿 모드로 열기</b>, 또는 페이지 줄 오른쪽의 모자 · 안경 버튼. 그룹 · 페이지의 브라우저로 새 시크릿 창(Edge 는 InPrivate 창)에 엽니다. 관리 창에서 연 시크릿 창을 닫으면 관리 창이 다시 앞으로 옵니다 (macOS)</td></tr>
+  <tr><td>그룹을 늘 시크릿 모드로 열기</td><td>그룹 편집(연필 ✎) → 브라우저 아래 <b>항상 시크릿 모드로 열기</b>, 또는 그룹 우클릭 → <b>항상 시크릿 모드로 열기</b>. 켠 그룹은 그룹 열기 · 페이지 열기 · 메뉴바에서 열기가 모두 시크릿 창으로 열리고, 그룹 카드에 모자 · 안경 표시가 붙습니다</td></tr>
+  <tr><td>페이지 편집 · 삭제</td><td>줄 오른쪽 ✎ · 🗑 (휴지통은 확인 없이 바로 지웁니다)</td></tr>
+  <tr><td>그룹을 열 때 빼 둘 페이지</td><td>페이지 줄 맨 왼쪽의 스위치를 끕니다. 끈 페이지는 흐리게 보이고 그룹을 열 때 열지 않습니다 (그 페이지만 열 때는 열립니다). 원본 LinkGroups 와 같은 형식으로 저장됩니다</td></tr>
+  <tr><td>이 그룹에서 찾기</td><td>그룹 이름 줄의 <b>이 그룹에서 찾기</b>. 그 그룹의 페이지 이름 · URL 에서 찾고 맞는 글자를 강조합니다</td></tr>
+  <tr><td>브라우저 탭 그룹과 맞추기 (동기화)</td><td>그룹 이름 옆 ⟳ 버튼(또는 그룹 오른쪽 클릭 → <b>브라우저 탭 그룹과 동기화…</b>). 그룹의 브라우저에 같은 이름으로 열린 탭 그룹과 비교해, 브라우저에만 있는 페이지를 골라 더하고 이 그룹에만 있는 페이지를 골라 뺍니다. <b>전체 덮어쓰기</b>는 탭 그룹과 똑같이(순서까지) 맞춥니다. 브라우저를 건드리지 않고 읽습니다</td></tr>
+  <tr><td>키보드</td><td><kbd>⌘</kbd><kbd>1</kbd>(Windows 는 <kbd>Ctrl</kbd><kbd>1</kbd>) 검색창 · <kbd>↓</kbd> 그룹 목록으로 · <kbd>↑</kbd> <kbd>↓</kbd> 그룹 · 섹션 오가기 · 섹션에서 <kbd>←</kbd> <kbd>→</kbd> 접기 · 펼치기 · 그룹에서 <kbd>→</kbd> 페이지 목록, 페이지 목록에서 <kbd>←</kbd> 그룹 목록 · <kbd>Return</kbd> 열기 · <kbd>Tab</kbd> 오른쪽 클릭 메뉴</td></tr>
+  <tr><td>되돌리기</td><td><kbd>⌘</kbd><kbd>Z</kbd>(Windows 는 <kbd>Ctrl</kbd><kbd>Z</kbd>)로 방금 한 일을 되돌리고, <kbd>⌘</kbd><kbd>⇧</kbd><kbd>Z</kbd>(Windows 는 <kbd>Ctrl</kbd><kbd>Y</kbd> 또는 <kbd>Ctrl</kbd><kbd>⇧</kbd><kbd>Z</kbd>)로 다시 실행합니다. 그룹 · 페이지 · 섹션 · 보관함을 바꾼 일(추가 · 편집 · 삭제 · 옮기기 · 보관 · 복원 · 스위치 · 동기화 · 가져오기)이 대상이고, 메뉴바 창에서도 됩니다. 앱을 켜 둔 동안 프로필마다 최근 50번까지 기억하고, 앱을 끄면 지워집니다. 이름 · 주소를 입력하는 칸에서는 입력한 글자를 되돌립니다. 브라우저에 연 탭 · 설정은 되돌리지 않습니다</td></tr>
+  <tr><td>순서 바꾸기</td><td>그룹 · 페이지를 끌어서 놓기. 그룹은 놓을 자리에 파란 가로선이 나옵니다 (<a href="#use-sections">섹션</a>)</td></tr>
+  <tr><td>그룹 여러 개 고르기</td><td><kbd>⌘</kbd>(Windows 는 <kbd>Ctrl</kbd>) · <kbd>⇧</kbd> 클릭. 고른 카드는 왼쪽 위 모서리가 파랗게 표시됩니다. 고른 그룹은 함께 끌어 옮기거나, 오른쪽 클릭으로 섹션 · 보관함 이동 · 삭제를 한 번에 합니다</td></tr>
+  <tr><td>다른 그룹으로 옮기기</td><td>페이지를 왼쪽 그룹 위로 끌어다 놓기, 또는 우클릭 → <b>다른 그룹으로 이동</b></td></tr>
+  <tr><td>지우지 않고 치워 두기</td><td>그룹 · 페이지 우클릭 → <b>보관함으로 이동</b> (<a href="#use-archive">보관함</a>)</td></tr>
+</table>
+<figure class="medium">
+  <img src="images/12-group-edit.png" alt="그룹 편집 창. 이름 · 색 19가지 · 아이콘 · 브라우저 · 태그">
+  <figcaption>그룹 편집. 색은 위 줄이 Chrome 탭 그룹과 같은 색, 아래 줄이 앱 전용 색입니다. 아이콘은 기본 모양 40가지 또는 내 이미지.</figcaption>
+</figure>
+
+<h3 id="use-profiles">프로필</h3>
+<p>회사 · 개인처럼 그룹 목록을 통째로 나눠 쓰려면 프로필을 만듭니다. 프로필마다 그룹 · 섹션 · 보관함 · 백업이 따로 있고, 관리 창 · 메뉴바 창 · 검색은 <b>지금 프로필</b>의 그룹만 보여 줍니다.</p>
+<table>
+  <tr><th>하고 싶은 일</th><th>방법</th></tr>
+  <tr><td>프로필 만들기</td><td>설정 → <b>프로필</b> 칸에 이름을 적고 <b>추가</b>. 처음부터 있던 목록은 <b>기본</b> 프로필입니다</td></tr>
+  <tr><td>프로필 바꾸기</td><td>메뉴바 창 검색창 왼쪽, 관리 창 왼쪽 맨 위의 프로필 버튼(👥 이름 ▾), 메뉴바 아이콘 오른쪽 클릭 → <b>프로필</b>, 또는 설정 → 프로필의 <b>바꾸기</b>. 바꾸면 모든 창이 함께 바뀌고, 다음에 켤 때도 그 프로필로 시작합니다</td></tr>
+  <tr><td>이름 · 아이콘 · 색 바꾸기, 지우기</td><td>설정 → 프로필의 <b>편집</b>(그룹 아이콘처럼 기본 모양 40가지 또는 내 이미지, 색 19가지) · <b>삭제</b>. 고른 아이콘은 프로필 버튼에 보입니다. 기본 프로필은 지울 수 없습니다. 지운 프로필의 데이터는 지우지 않고 백업 폴더의 <code>deleted-profiles</code> 로 옮겨 두므로, 그 안의 <code>data.json</code> 을 <b>가져오기</b>로 되살릴 수 있습니다</td></tr>
+</table>
+<p>설정 → 데이터 · 백업의 내보내기 · 가져오기 · 자동 백업 · 되돌리기는 지금 프로필에 적용됩니다. 확장 · 단축키 · 그룹 열기 방식 같은 나머지 설정은 모든 프로필이 함께 씁니다.</p>
+
+<h3 id="use-sections">섹션</h3>
+<p>그룹이 많으면 섹션으로 묶어 접고 펼칩니다. 섹션 &gt; 그룹 &gt; 페이지 순이고, 열 때는 그룹 단위로 엽니다. 섹션과 섹션 밖 그룹은 순서 제한 없이 섞어 둘 수 있고, 섹션 안 그룹은 들여 써서 구분됩니다. 펼친 섹션은 마지막 그룹 아래에 가로줄이 그어집니다.</p>
+<table>
+  <tr><th>하고 싶은 일</th><th>방법</th></tr>
+  <tr><td>섹션 만들기</td><td>그룹 목록 위 <b>섹션</b> 버튼, 그룹 목록 빈 곳 우클릭 → <b>새 섹션 만들기</b>, 그룹 우클릭 → <b>새 섹션 만들기</b>(그 그룹 자리에 섹션을 만들고 그 그룹을 넣습니다), 또는 그룹을 다른 그룹 위에 끌어 놓기(두 그룹을 담은 섹션이 그 자리에 생깁니다)</td></tr>
+  <tr><td>그룹 넣기 · 빼기</td><td>그룹을 섹션 이름 위나 섹션 안 그룹 사이로 끌어 놓기, 그룹 우클릭 → <b>섹션</b>, 섹션 우클릭 → <b>그룹 추가</b>, 또는 그룹 편집의 <b>섹션</b>. 빼려면 우클릭 → <b>섹션</b> → <b>섹션 없음</b>이나 섹션 끝 가로줄 · 섹션 밖으로 끌어 놓기</td></tr>
+  <tr><td>섹션 안에 새 그룹</td><td>섹션 우클릭 → <b>새 그룹 만들기</b></td></tr>
+  <tr><td>접기 · 펼치기</td><td>섹션 이름 클릭. 메뉴바 창도 같이 접힙니다</td></tr>
+  <tr><td>순서 바꾸기</td><td>섹션 이름을 끌어 놓기, 또는 섹션 우클릭 → <b>위로 이동</b> · <b>아래로 이동</b></td></tr>
+  <tr><td>이름 바꾸기 · 삭제</td><td>섹션 우클릭 → <b>섹션 편집…</b> · <b>섹션 삭제…</b> (안의 그룹은 지우지 않고 섹션이 있던 자리에 남깁니다)</td></tr>
+</table>
+<p>그룹을 끌 때 줄 위쪽 · 아래쪽에 놓으면 그 자리로 옮겨지고(가로선), 섹션 밖 그룹의 가운데에 놓으면 두 그룹을 담은 섹션을 만듭니다(파란 테두리). 가로선이 들여 그려지면 섹션 안으로, 왼쪽 끝까지 그려지면 섹션 밖으로 들어갑니다.</p>
+<p>섹션은 원본 LinkGroups 1.5.5 이후와 같은 형식으로 <code>data.json</code> 에 저장되어, 서로 복사해도 섹션이 그대로 읽힙니다.</p>
+
+<h3 id="use-preview">미리보기</h3>
+<p>페이지 줄 오른쪽의 👁 를 누르면 옆에 미리보기가 뜹니다. <b>크게 열기</b>를 누르면 원래 크기 창으로 엽니다. 미리보기 창 가장자리를 끌면 크기가 바뀌고, 다음에도 그 크기로 엽니다 (작은 미리보기 · 크게 연 창 따로).</p>
+<figure class="medium">
+  <img src="images/04-preview.png" alt="페이지 미리보기 말풍선">
+  <figcaption>미리보기. ‘크게 열기’ · ‘Chrome(또는 Edge · Whale) 에서 열기’</figcaption>
+</figure>
+<div class="tip"><b>로그인이 필요한 사이트</b>: 미리보기는 Chrome · Edge · Whale 의 로그인 정보를 쓰지 않습니다. 처음 한 번 <b>크게 열기</b> 창에서 로그인하면, 로그인 쿠키를 키체인에 암호화해 보관하고 다음 미리보기부터 로그인 상태로 보입니다. 쿠키가 만료되면 다시 로그인하면 됩니다.</div>
+
+<h3 id="use-edit">목록 편집 · 한꺼번에 삭제 · 이동</h3>
+<p>그룹 목록 위, 페이지 목록 위의 <b>목록 편집</b>을 누르면 체크박스가 생깁니다. 체크한 것을 한꺼번에 <b>보관</b> · <b>삭제</b>하거나 <b>다른 그룹으로 이동</b>할 수 있습니다. <kbd>⌘</kbd> · <kbd>⇧</kbd> 클릭으로 여러 개를 고를 수도 있습니다.</p>
+<figure>
+  <img src="images/05-edit.png" alt="목록 편집 중 페이지 두 개를 체크한 모습">
+  <figcaption>목록 편집. 맨 앞 체크박스는 전체 선택 · 해제</figcaption>
+</figure>
+<p>옮길 그룹에 같은 주소가 이미 있으면 중복으로 넣지 않고 원래 그룹에서만 뺍니다.</p>
+
+<h3 id="use-archive">보관함</h3>
+<p>당장은 쓰지 않지만 지우기는 아까운 그룹 · 페이지를 보관함에 치워 둡니다. 보관한 것은 메뉴바 · 그룹 목록 · 검색에 나오지 않고, 언제든 되돌릴 수 있습니다.</p>
+<table>
+  <tr><th>하고 싶은 일</th><th>방법</th></tr>
+  <tr><td>보관하기</td><td>그룹이나 페이지를 우클릭 → <b>보관함으로 이동</b>. 여러 개를 골라도 됩니다. <b>목록 편집</b>에서 체크한 뒤 <b>보관</b>을 눌러도 됩니다</td></tr>
+  <tr><td>보관함 열기</td><td>관리 창 왼쪽 그룹 목록 맨 아래의 초록색 <b>보관함</b> 버튼 (오른쪽 숫자는 보관한 개수)</td></tr>
+  <tr><td>보관한 것 보기</td><td><b>보관 그룹</b> · <b>보관 페이지</b>가 접힌 채로 나옵니다. › 를 눌러 펼칩니다. 보관 그룹은 한 번 더 펼치면 안의 페이지가 보입니다</td></tr>
+  <tr><td>보관함에서 찾기</td><td>보관함 오른쪽 위 검색창. 관리 창 검색과 같은 규칙(띄어 쓴 검색어는 모두 맞아야 하고, <code>#태그</code> 는 태그만)이고, 보관 페이지는 보관하기 전 그룹 이름으로도 찾습니다. 결과가 있는 칸만 펼쳐 보여줍니다</td></tr>
+  <tr><td>그룹 복원</td><td>보관 그룹 줄의 <b>복원</b> → 그룹 목록 끝으로 돌아갑니다. 페이지 · 아이콘 · 브라우저 설정은 그대로입니다</td></tr>
+  <tr><td>페이지 복원</td><td>보관 페이지 줄의 <b>복원</b> 메뉴에서 넣을 그룹을 고릅니다. 원래 그룹이 있으면 맨 위에 나오고, <b>새 그룹 만들기…</b>를 고르면 원래 그룹 이름 · 색으로 채운 새 그룹에 넣습니다</td></tr>
+  <tr><td>완전히 지우기</td><td>줄 오른쪽 🗑 → <b>영구 삭제</b> (앱을 끄기 전에는 <kbd>⌘</kbd><kbd>Z</kbd> 로 되돌릴 수 있습니다)</td></tr>
+  <tr><td>끌어서 보관 · 복원</td><td>그룹 · 섹션 · 페이지를 왼쪽 아래 <b>보관함</b> 버튼에 끌어 놓으면 보관합니다 (섹션은 안의 그룹을 보관하고 섹션을 지웁니다). 보관함에서 그룹을 왼쪽 그룹 목록의 원하는 자리에 끌어 놓으면 그 자리로, 페이지를 그룹 위에 놓으면 그 그룹으로 복원합니다</td></tr>
+  <tr><td>보관함 안에서 정리</td><td>보관 페이지를 보관 그룹 위에 끌어 놓으면 그 안으로 넣고, 보관 그룹끼리 · 보관 그룹 안 페이지끼리 끌어서 순서를 바꿉니다. 보관 그룹을 펼치면 페이지마다 <b>복원</b> · 🗑 버튼이 있습니다</td></tr>
+  <tr><td>바로 열기</td><td>보관한 그룹 · 페이지를 더블클릭하면 복원하지 않고 바로 엽니다. ‘보관 그룹’ · ‘보관 페이지’ 제목을 눌러도 펼쳐집니다</td></tr>
+</table>
+<p>페이지를 복원할 그룹에 같은 주소가 이미 있으면 다시 넣지 않고 보관함에서만 뺍니다.</p>
+
+<h3 id="use-browser">그룹별 브라우저 (Chrome · Edge · Whale)</h3>
+<p>그룹마다 여는 브라우저를 정합니다. 새 그룹은 <b>Chrome</b> 이 기본이고, 그룹 목록 · 메뉴바의 그룹 카드 오른쪽 끝 아이콘으로 어느 브라우저에서 열리는지 보입니다.</p>
+<ul>
+  <li><b>바꾸기</b>: 그룹 화면의 ‘그룹 열기’ 왼쪽 브라우저 버튼, 그룹 오른쪽 클릭 → <b>브라우저</b>, 또는 그룹 편집(연필 ✎)의 <b>브라우저</b></li>
+  <li>그룹 안 페이지 하나를 열 때도 그 그룹의 브라우저로 엽니다.</li>
+  <li>Edge · Whale 에서 탭 그룹을 가져와 만든 그룹은 처음부터 그 브라우저로 정해집니다.</li>
+</ul>
+
+<h3 id="use-import-tabs">열린 탭 가져오기</h3>
+<p>그룹 화면의 <b>열린 탭 가져오기</b>를 누르고 위쪽 <b>가져올 브라우저</b>에서 Chrome · Edge · Whale 중 하나를 고르면, 그 브라우저에 열린 탭이 창 · 탭 그룹별로 나옵니다. 골라서 <b>추가</b>하면 그 그룹에 들어갑니다.</p>
+<ul>
+  <li>창 · 탭 그룹 줄의 체크박스: 그 안의 탭 전체 선택 · 해제</li>
+  <li>그룹에 이미 있는 주소는 <b>이미 있음</b>으로 표시되고 고를 수 없습니다.</li>
+  <li><b>탭 제목을 alias 로</b>를 켜 두면 탭 제목이 표시 이름이 됩니다.</li>
+</ul>
+<figure>
+  <img src="images/06-import-tabs.png" alt="열린 탭 가져오기 화면. 탭 그룹별로 묶인 탭 목록">
+  <figcaption>열린 탭 가져오기</figcaption>
+</figure>
+
+<h3 id="use-import-groups">탭 그룹 가져오기</h3>
+<p>관리 창 왼쪽 검색창 아래 <b>탭 그룹 가져오기</b>는 고른 브라우저(Chrome · Edge · Whale)의 탭 그룹을 같은 이름 · 색의 그룹으로 만듭니다. 새로 만든 그룹은 가져온 브라우저에서 열립니다. 확장이 없어도 브라우저가 저장해 둔 세션에서 탭 그룹을 읽습니다.</p>
+<ul>
+  <li>같은 이름의 그룹이 이미 있으면 새로 만들지 않고 <b>기존 그룹에 추가</b>합니다.</li>
+  <li>기존 그룹에 이미 있는 페이지는 <b>이미 있음</b>으로 빠집니다.</li>
+  <li>버튼에 결과가 미리 나옵니다. 예: <i>가져오기 (새 그룹 2개 · 기존 그룹 1개에 추가 · 페이지 6개)</i></li>
+  <li><b>닫힌 탭 그룹 보기</b>를 켜면 브라우저에 저장된 닫은 탭 그룹이 목록 아래에 접힌 채로 나옵니다. 열린 그룹처럼 골라 가져옵니다. 브라우저가 꺼져 있으면 저장된 그룹이 모두 닫힌 그룹으로 나옵니다.</li>
+</ul>
+<figure>
+  <img src="images/13-closed-groups.png" alt="탭 그룹 가져오기에서 닫힌 탭 그룹 보기를 켠 모습">
+  <figcaption>닫힌 탭 그룹 보기를 켜면 목록 아래 ‘닫힌 탭 그룹’ 칸이 생깁니다</figcaption>
+</figure>
+<div class="callout"><b>주의</b>: 탭 그룹에 속하지 않은 탭은 이 화면에 나오지 않습니다. 그런 탭은 먼저 <b>새 그룹</b>으로 그룹을 만든 뒤, 그 그룹 화면의 <b>열린 탭 가져오기</b>로 추가해 주세요.</div>
+<figure>
+  <img src="images/07-import-groups.png" alt="탭 그룹 가져오기 화면">
+  <figcaption>탭 그룹 가져오기</figcaption>
+</figure>
+
+<h3 id="use-search">검색</h3>
+<table>
+  <tr><th>입력</th><th>찾는 것</th></tr>
+  <tr><td><code>위키</code></td><td>그룹 이름 · 태그 · alias · URL 에 ‘위키’가 들어간 것</td></tr>
+  <tr><td><code>#업무</code></td><td>태그가 ‘업무’인 그룹</td></tr>
+  <tr><td><code>#업무 지라</code></td><td>‘업무’ 태그 그룹 안에서 ‘지라’가 들어간 페이지 (띄어 쓴 검색어는 모두 맞아야 합니다)</td></tr>
+</table>
+<p>검색어와 맞는 글자는 그룹 이름 · 태그 · 페이지 이름 · URL 에서 노랗게 강조됩니다. 검색 중에는 맞는 그룹이 있는 섹션이 모두 펼쳐집니다. 메뉴바 창 검색도 같습니다.</p>
+<p><b>검색할 곳 고르기</b>: 검색창 옆 거르기(깔때기) 버튼에서 <b>이름</b>(그룹 · 페이지) · <b>태그</b> · <b>URL</b> 을 켜고 끕니다. 관리 창 · 메뉴바 창 · 보관함이 함께 쓰고, 일부만 켜 두면 버튼이 파랗게 표시됩니다. <code>#태그</code> 검색어는 늘 태그를 봅니다.</p>
+<figure>
+  <img src="images/14-search.png" alt="관리 창에서 rust 로 검색한 모습. 맞는 글자가 노랗게 표시됩니다">
+  <figcaption>검색. 맞는 그룹만 남고, 오른쪽에는 맞는 페이지만 나옵니다</figcaption>
+</figure>
+</section>
+
+<section id="settings">
+<h2>설정</h2>
+<p>메뉴바 창 아래 <b>설정</b> 버튼이나 관리 창 오른쪽 아래 <b>설정</b>으로 엽니다.</p>
+<p><b>로그인할 때 자동으로 실행</b>을 켜면 Mac 을 재부팅하거나 다시 로그인할 때 메뉴바에 LinkGroupz 가 바로 뜹니다. 이때는 아무 창도 열지 않습니다.</p>
+<p><b>프로필</b> 칸에서 프로필을 추가 · 편집(이름 · 아이콘 · 색) · 삭제합니다 (<a href="#use-profiles">프로필</a>).</p>
+<p><b>화면 모드</b>: 설정 아래쪽 <b>화면 모드</b> 칸에서 <b>시스템</b> · <b>라이트</b> · <b>다크</b> 를 고릅니다. 시스템이면 macOS · Windows 의 화면 모드를 따릅니다. 바꾸면 열린 창이 바로 바뀝니다.</p>
+<p><b>언어</b>: 설정 아래쪽 <b>언어 · Language</b> 칸에서 <b>시스템</b> · <b>한국어</b> · <b>English</b> 를 고릅니다. 시스템이면 macOS · Windows 의 언어가 한국어일 때 한국어, 아니면 영어로 나옵니다. 바꾸면 열린 창이 바로 다시 그려집니다.</p>
+<p><b>앱을 켤 때 여는 창</b>: 앱을 직접 켤 때 <b>메뉴바 창</b>(기본)이나 <b>관리 창</b>을 엽니다. 처음 켤 때는 시작 안내와 관리 창이 열립니다.</p>
+<p><b>Dock 에 아이콘 표시</b>(기본 켜짐, macOS)를 켜 두면 Dock 아이콘이나 ⌘Tab 으로 LinkGroupz 로 바로 돌아옵니다. Dock 아이콘을 누르면 관리 창이 열립니다. 끄면 메뉴바 아이콘으로만 씁니다.</p>
+<p><b>단축키</b>: 아이콘을 누르지 않고 키보드로 메뉴바 창을 열 수 있습니다. 설정 → 단축키의 <b>없음</b>을 누른 뒤 쓸 단축키(예: ⌥Space)를 누르면 정해집니다. 다른 프로그램을 쓰는 중에도 그 단축키로 창이 열리고, 열리면 바로 검색할 수 있습니다. 창이 열린 채로 한 번 더 누르면 관리 창이 열립니다. <b>지우기</b>로 없앱니다.</p>
+<figure class="medium">
+  <img src="images/08-settings.png" alt="설정 화면">
+  <figcaption>설정</figcaption>
+</figure>
+<table>
+  <tr><th>그룹 열기 방식</th><th>동작</th></tr>
+  <tr><td>자동 (기본)</td><td>그룹의 브라우저에 확장이 있으면 탭 그룹, 없으면 새 창에 모두</td></tr>
+  <tr><td>항상 탭 그룹</td><td>항상 탭 그룹으로 (확장이 없으면 접속 오류 페이지가 하나 뜹니다)</td></tr>
+  <tr><td>항상 새 창</td><td>항상 그룹의 브라우저 새 창에 모두</td></tr>
+</table>
+<p><b>업데이트</b> 칸에서 현재 버전과 자동 업데이트 상태를 보고, 자동 업데이트를 켜고 끕니다 (<a href="#update">자동 업데이트</a>).</p>
+<p><b>미리보기 로그인</b> 칸의 <b>저장된 로그인 확인</b>을 누르면 저장된 사이트 수가 나옵니다 (키체인을 읽으므로 macOS 가 키체인 암호를 물을 수 있습니다). 미리보기 로그인 정보도 여기서 지웁니다.</p>
+<p><b>데이터 · 백업</b> 칸 (<a href="#data">데이터</a>)</p>
+<table>
+  <tr><th>하고 싶은 일</th><th>방법</th></tr>
+  <tr><td>다른 컴퓨터로 옮기기 · 따로 보관</td><td><b>내보내기…</b>로 그룹 · 페이지 · 섹션 · 보관함을 파일 하나로 저장합니다. 내 이미지로 바꾼 그룹 아이콘도 함께 들어갑니다</td></tr>
+  <tr><td>파일에서 가져오기</td><td><b>가져오기…</b>로 파일을 고르면 무엇이 들었는지 보여 준 뒤 <b>이것으로 바꾸기</b>(지금 목록을 파일 내용으로) 또는 <b>지금 목록에 더하기</b>를 고릅니다. 원본 LinkGroups 의 <code>data.json</code> 도 가져올 수 있습니다. 바꾸기 전 목록은 백업 폴더에 따로 남깁니다</td></tr>
+  <tr><td>자동 백업</td><td>하루에 한 번 그날 처음 상태를 백업해 둡니다 (내 이미지로 바꾼 그룹 아이콘도 함께). 보관 기간은 <b>끔 · 3일 · 7일(기본) · 14일 · 30일치 · 무제한</b> 중에서 고르고, 기간이 지난 백업은 지웁니다 (무제한이면 지우지 않습니다)</td></tr>
+  <tr><td>예전 상태로 되돌리기</td><td>백업 목록에서 날짜를 골라 <b>되돌리기</b>. 되돌리기 직전 목록도 따로 남겨 두므로 다시 되돌릴 수 있습니다</td></tr>
+</table>
+</section>
+
+<section id="update">
+<h2>자동 업데이트</h2>
+<p>새 버전은 LinkGroupz 릴리스 페이지(설정 → 업데이트 칸의 <b>릴리스 페이지 열기</b>)에 올라옵니다. 앱이 이 페이지를 확인해 스스로 업데이트합니다. 지금 버전은 관리 창 오른쪽 아래와 설정 → 업데이트 칸에 나오고, 새 버전은 설정 → 업데이트 칸의 ↻ 로 바로 확인합니다.</p>
+<table>
+  <tr><th>하고 싶은 일</th><th>방법</th></tr>
+  <tr><td>새 버전 바로 확인</td><td>설정 → 업데이트 칸의 ↻. 새 버전이 있으면 옆에 <b>x.y.z 으로 업데이트</b> 버튼이 생기고, 관리 창 오른쪽 아래에도 <b>새 버전 x.y.z</b> 이 표시됩니다</td></tr>
+  <tr><td>업데이트하기</td><td>설정의 <b>x.y.z 으로 업데이트</b> 버튼, 또는 업데이트 창의 <b>지금 업데이트</b>. 같은 창에 내려받기 · 설치 진행 막대가 차오르고, 서명을 확인해 설치한 뒤 LinkGroupz 가 잠깐 꺼졌다 다시 켜집니다 (Windows 도 설치 프로그램 창 없이 설치합니다). 그룹 · 페이지 · 보관함 · 설정은 그대로입니다</td></tr>
+  <tr><td>자동 확인 끄기 · 켜기</td><td>설정 → 업데이트 칸의 <b>새 버전 자동 확인</b>. 꺼도 ↻ 로 직접 확인할 수 있습니다</td></tr>
+</table>
+<ul>
+  <li>자동 확인을 켜 두면(기본) 앱을 켜고 30초 뒤, 그 뒤 1시간마다 확인하고, 새 버전이 있으면 바뀐 점과 함께 <b>지금 업데이트</b> / <b>나중에</b> 를 묻는 업데이트 창을 띄웁니다.</li>
+  <li><b>나중에</b>를 고른 버전은 더 새 버전이 올라오기 전까지 다시 묻지 않습니다. 그동안에도 설정에서 직접 업데이트할 수 있습니다.</li>
+  <li>내려받은 파일은 서명이 맞을 때만 설치합니다. 서명이 맞지 않으면 업데이트 창에 ‘받은 파일의 서명이 맞지 않아 설치하지 않았습니다’ 라고 알리고 그대로 둡니다.</li>
+  <li>업데이트 뒤 macOS 가 키체인 접근을 물으면 Mac 로그인 암호를 넣고 <b>항상 허용</b>을 누릅니다. 확장을 쓰는 경우 브라우저에서 확장을 한 번 새로고침합니다.</li>
+  <li>업데이트한 뒤 처음 켜면 그 사이 바뀐 점을 보여주는 창이 뜹니다. 설정 → 업데이트 칸의 <b>바뀐 점 보기</b>로 다시 볼 수 있습니다.</li>
+</ul>
+</section>
+
+<section id="data">
+<h2>데이터 · 업데이트 · 삭제</h2>
+<table>
+  <tr><th>무엇</th><th>위치</th></tr>
+  <tr><td>그룹 · 페이지 · 보관함</td><td><code>~/Library/Application Support/LinkGroupz/data.json</code></td></tr>
+  <tr><td>자동 백업</td><td><code>~/Library/Application Support/LinkGroupz/backups</code></td></tr>
+  <tr><td>더한 프로필의 그룹 · 백업</td><td><code>~/Library/Application Support/LinkGroupz/profiles/&lt;프로필 id&gt;</code> (기본 프로필은 위 <code>data.json</code> · <code>backups</code>)</td></tr>
+  <tr><td>Chrome 확장</td><td><code>~/Library/Application Support/LinkGroupz/chrome-extension</code></td></tr>
+  <tr><td>사이트 아이콘</td><td><code>~/Library/Application Support/LinkGroupz/favicons</code></td></tr>
+  <tr><td>그룹 아이콘 이미지</td><td><code>~/Library/Application Support/LinkGroupz/icons</code></td></tr>
+  <tr><td>미리보기 로그인 쿠키</td><td>키체인 ‘LinkGroupz 미리보기 로그인 쿠키’</td></tr>
+</table>
+<p><b>백업 · 다른 Mac 으로 옮기기</b>: 설정 → 데이터 · 백업의 <b>내보내기…</b>로 저장한 파일을 다른 Mac 의 <b>가져오기…</b>로 넣습니다. 자동 백업은 같은 칸에서 보관 기간을 정하고 되돌립니다 (<a href="#settings">설정</a>).</p>
+<p><b>업데이트</b>: 자동 업데이트를 켜 두면 앱이 알아서 묻고 설치합니다 (<a href="#update">자동 업데이트</a>). 직접 하려면 새 DMG 의 LinkGroupz 를 Applications 에 덮어쓰고, 확장을 넣은 브라우저(Chrome · Edge · Whale)에서 확장을 새로고침합니다. 데이터는 그대로 남습니다.</p>
+<p><b>삭제</b>: 메뉴바 창의 <b>종료</b> → Applications 의 LinkGroupz 를 휴지통으로 → Chrome · Edge · Whale 에서 확장 제거. 데이터까지 지우려면 위 <code>LinkGroupz</code> 폴더와 키체인 항목을 지웁니다.</p>
+</section>
+
+<section id="faq">
+<h2>자주 묻는 문제</h2>
+<h3>그룹 · 페이지가 목록에서 사라졌어요</h3>
+<p>먼저 프로필 버튼(메뉴바 창 · 관리 창 왼쪽 위)에서 다른 프로필로 바뀌어 있지 않은지 보세요. 그 다음 관리 창 왼쪽 맨 아래 <b>보관함</b>을 열어 보세요. 보관함으로 옮긴 것은 목록 · 메뉴바 · 검색에 나오지 않습니다. 거기서 <b>복원</b>하면 됩니다. 방금 실수로 지웠다면 <kbd>⌘</kbd><kbd>Z</kbd>(Windows 는 <kbd>Ctrl</kbd><kbd>Z</kbd>)로 되돌리고, 앱을 껐다 켰다면 설정 → 데이터 · 백업에서 전날 백업으로 <b>되돌리기</b>할 수 있습니다.</p>
+<h3>시작 안내 창이 계속 ‘확장을 기다리는 중’이에요</h3>
+<p><code>chrome://extensions</code> 에서 LinkGroupz Tab Groups 가 <b>켜져</b> 있는지, 로드한 폴더가 <code>~/Library/Application Support/LinkGroupz/chrome-extension</code> 인지 확인하세요. 다른 Chrome 프로필에 설치해도 감지됩니다. Edge 는 <code>edge://extensions</code> 에서 같은 것을 확인하세요. 설정 창에 브라우저별 감지 결과가 나옵니다.</p>
+<h3>그룹을 열었는데 탭 그룹이 안 생기고 탭만 열려요</h3>
+<p>설정의 그룹 열기 방식이 <b>항상 새 창</b>이 아닌지, 확장이 감지되는지 확인하세요. 앱을 업데이트했다면 확장을 넣은 브라우저에서 확장을 새로고침해야 합니다.</p>
+<h3><code>linkgroupz.invalid</code> 접속 오류 페이지가 떠요</h3>
+<p>확장이 없거나 꺼진 상태에서 탭 그룹으로 열려고 할 때 뜹니다. 확장을 켜거나, 설정에서 그룹 열기 방식을 <b>자동</b>으로 두세요.</p>
+<h3>미리보기에서 계속 로그인 화면이 보여요</h3>
+<p>미리보기의 <b>크게 열기</b> 창에서 로그인해 주세요. 키체인 허용 창이 뜨면 <b>항상 허용</b>을 눌러야 로그인이 저장됩니다.</p>
+<h3>열린 탭 가져오기를 눌렀는데 아무것도 안 나와요</h3>
+<p>고른 브라우저가 켜져 있어야 합니다. 확장이 없다면 ‘Google Chrome(또는 Microsoft Edge · Whale)을 제어’ 허용이 필요합니다. 거부했다면 <b>시스템 설정 → 개인정보 보호 및 보안 → 자동화</b>에서 LinkGroupz 의 브라우저 항목을 켜세요.</p>
+<h3>탭을 가져올 때 브라우저 창이 잠깐 나왔다 들어가요</h3>
+<p>LinkGroupz 는 브라우저가 스스로 저장해 두는 세션 파일에서 열린 탭 · 탭 그룹을 읽어, 브라우저를 건드리지 않습니다. 그 파일을 읽지 못한 경우에만 확장에게 받으려고 임시 탭을 잠깐 열었다 닫는데, 이때 브라우저가 잠깐 앞으로 나옵니다. 방금 바꾼 탭이 몇 초 안 돼 아직 저장되지 않았을 수 있으니, 잠시 뒤 다시 가져오면 됩니다.</p>
+<h3>자동화 목록에 LinkGroupz 나 Edge · Whale 이 없어요</h3>
+<p>이 목록에는 앱이 그 브라우저를 실제로 한 번 제어하려고 해서 macOS 가 물어본 항목만 나옵니다. 직접 추가하는 곳은 없습니다. 확장이 있으면 LinkGroupz 는 브라우저를 제어하지 않으므로 목록에 없어도 정상이고, 확장 없이 그 브라우저에서 열린 탭 가져오기를 처음 할 때 물어본 뒤에 생깁니다. 그룹을 여는 데는 이 허용이 필요 없습니다.</p>
+<h3>Edge(또는 Chrome · Whale)에서 시크릿 창으로 열리지 않아요</h3>
+<p>회사 관리 정책으로 그 브라우저의 시크릿(InPrivate) 창이 꺼져 있으면 브라우저가 일반 창으로 열어 버립니다. LinkGroupz 는 이때 일반 창으로 열지 않고 안내를 띄웁니다. 그 그룹을 다른 브라우저로 바꾸면 시크릿 창으로 열 수 있습니다.</p>
+<h3>Dock 에 LinkGroupz 아이콘이 생겼어요</h3>
+<p>기본으로 Dock 에 나옵니다. 메뉴바 아이콘만 쓰려면 설정 → <b>Dock 에 아이콘 표시</b>를 끄세요.</p>
+<h3>재부팅했는데 LinkGroupz 가 켜지지 않아요</h3>
+<p>설정의 <b>로그인할 때 자동으로 실행</b>이 켜져 있는지 확인하세요. 켜져 있는데도 안 켜지면 <b>시스템 설정 → 일반 → 로그인 항목</b>에서 LinkGroupz 가 허용돼 있는지 확인합니다. DMG 안에서 실행한 앱은 등록할 수 없으니 응용 프로그램 폴더로 옮긴 뒤 켜 주세요.</p>
+<h3>업데이트 확인이 실패해요</h3>
+<p>‘새 버전을 확인하지 못했습니다’가 나오면 인터넷 연결을 확인합니다. ‘이 컴퓨터용 배포 파일이 아직 올라오지 않았습니다’가 나오면 그 버전이 이 컴퓨터(운영체제 · CPU)용으로는 아직 나오지 않은 것입니다.</p>
+<h3>키체인 암호를 묻는 창이 또 떠요</h3>
+<p>앱을 새 버전으로 바꾸면 macOS 가 미리보기 로그인 쿠키 접근을 다시 물을 수 있습니다. Mac 로그인 암호를 넣고 <b>항상 허용</b>을 누르면 그 버전에서는 다시 묻지 않습니다.</p>
+</section>
+</main>
+</div>
+</body>
+</html>

@@ -1,0 +1,56 @@
+# Windows 설치 파일을 만든다.
+#
+# 버전 태그(v1.5.5 …)를 올리면 실행된다. 만들어진 설치 파일은 이 실행의 아티팩트(windows-setup)로만 남고,
+# 서명과 릴리스 올리기는 `cargo xtask release` 가 로컬(macOS)에서 한다 — 서명 키는 GitHub 에 두지 않는다.
+name: Windows 설치 파일
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Rust 준비
+        run: |
+          rustup toolchain install stable --profile minimal --no-self-update
+          rustup default stable
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+            target
+          key: windows-cargo-${{ hashFiles('Cargo.lock') }}
+          restore-keys: windows-cargo-
+
+      - name: 테스트 (core · host)
+        run: cargo test -p linkgroupz-core -p linkgroupz-host
+
+      # 릴리스 저장소와 서명 공개 키는 소스에 없다. 이 저장소의 Actions 변수(Settings → Secrets and variables → Actions → Variables)에 둔다.
+      - name: 설치 파일 만들기
+        env:
+          LINKGROUPZ_RELEASES_REPO: ${{ vars.LINKGROUPZ_RELEASES_REPO }}
+          LINKGROUPZ_UPDATE_PUBKEY: ${{ vars.LINKGROUPZ_UPDATE_PUBKEY }}
+        run: |
+          if (-not $env:LINKGROUPZ_RELEASES_REPO -or -not $env:LINKGROUPZ_UPDATE_PUBKEY) {
+            throw "Actions 변수 LINKGROUPZ_RELEASES_REPO · LINKGROUPZ_UPDATE_PUBKEY 가 없습니다 (자동 업데이트 없는 설치 파일이 만들어진다)"
+          }
+          cargo xtask dist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-setup
+          path: dist/LinkGroupz-*-setup.exe
+          if-no-files-found: error
+          retention-days: 30

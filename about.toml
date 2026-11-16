@@ -1,0 +1,35 @@
+# 외부 코드 라이선스 고지(THIRD-PARTY-LICENSES.html)를 만들 때 cargo-about 이 읽는 설정.
+# `cargo xtask licenses` 가 이 파일을 쓴다.
+
+# 받아들이는 라이선스. 여기에 없는 라이선스의 크레이트가 들어오면 고지 생성이 실패한다
+# (GPL 처럼 소스 공개를 요구하는 라이선스가 모르는 사이 섞이지 않게 하는 문턱).
+# "A OR B" 처럼 고를 수 있는 크레이트는 이 목록에서 앞에 있는 쪽을 고른다.
+accepted = [
+    "MIT",
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "ISC",
+    "Zlib",
+    "BSL-1.0",
+    "Unicode-3.0",
+    # 파일 단위 카피레프트: 그 파일을 고쳐 배포할 때만 그 파일의 소스를 공개하면 된다. 고치지 않고 쓴다.
+    "MPL-2.0",
+]
+
+# 배포하는 OS · CPU. 다른 OS(Linux 등)에서만 쓰이는 크레이트는 고지에 넣지 않는다.
+targets = [
+    "aarch64-apple-darwin",
+    "x86_64-apple-darwin",
+    "x86_64-pc-windows-msvc",
+    "aarch64-pc-windows-msvc",
+]
+
+# 테스트에서만 쓰는 크레이트는 배포물에 들어가지 않는다.
+ignore-dev-dependencies = true
+# 빌드 때 쓰는 크레이트(매크로 · 빌드 스크립트)는 만들어 낸 코드가 배포물에 남을 수 있어 넣는다.
+ignore-build-dependencies = false
+
+# 이 작업 공간의 크레이트(publish = false)는 외부 코드가 아니다.
+private = { ignore = true }

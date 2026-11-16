@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LinkGroupz Guide</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #1d1d1f;
+    --muted: #6e6e73;
+    --line: #e5e5ea;
+    --card: #f5f5f7;
+    --accent: #0a66d8;
+    --warn-bg: #fff6e5;
+    --warn-line: #f0b955;
+    --code-bg: #eef0f3;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e;
+      --fg: #f2f2f7;
+      --muted: #a1a1a6;
+      --line: #38383a;
+      --card: #2c2c2e;
+      --accent: #4c9bff;
+      --warn-bg: #3a2f1a;
+      --warn-line: #b8862f;
+      --code-bg: #2f3136;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font: 16px/1.7 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  .layout { display: flex; max-width: 1180px; margin: 0 auto; }
+  nav {
+    position: sticky; top: 0; align-self: flex-start;
+    width: 230px; flex: none; height: 100vh; overflow-y: auto;
+    padding: 32px 16px 32px 24px; border-right: 1px solid var(--line);
+    font-size: 14px;
+  }
+  nav .brand { font-weight: 700; font-size: 17px; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+  nav .lang { margin: -10px 0 14px; font-size: 13px; color: var(--muted); }
+  nav .lang a { display: inline; padding: 0; color: var(--accent); }
+  nav ol { list-style: none; margin: 0; padding: 0; }
+  nav li { margin: 2px 0; }
+  nav a { color: var(--muted); text-decoration: none; display: block; padding: 4px 8px; border-radius: 6px; }
+  nav a:hover { background: var(--card); color: var(--fg); }
+  nav .sub a { padding-left: 20px; font-size: 13px; }
+  main { flex: 1; min-width: 0; padding: 40px 48px 80px; max-width: 900px; }
+  h1 { font-size: 32px; margin: 0 0 6px; }
+  h2 { font-size: 24px; margin: 56px 0 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+  h3 { font-size: 18px; margin: 32px 0 8px; }
+  p { margin: 8px 0; }
+  .lead { color: var(--muted); font-size: 17px; margin-bottom: 24px; }
+  a { color: var(--accent); }
+  code, kbd {
+    font: 13.5px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+    background: var(--code-bg); padding: 2px 6px; border-radius: 5px;
+  }
+  pre { background: var(--code-bg); padding: 12px 14px; border-radius: 8px; overflow-x: auto; }
+  pre code { background: none; padding: 0; }
+  figure { margin: 18px 0 24px; }
+  figure img {
+    display: block; max-width: 100%; height: auto;
+    border-radius: 10px; border: 1px solid var(--line);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, .12);
+  }
+  figure.small img { max-width: 420px; }
+  figure.medium img { max-width: 620px; }
+  figcaption { color: var(--muted); font-size: 14px; margin-top: 8px; }
+  ol.steps { padding-left: 22px; }
+  ol.steps li { margin: 6px 0; }
+  .callout {
+    background: var(--warn-bg); border-left: 4px solid var(--warn-line);
+    padding: 12px 16px; border-radius: 8px; margin: 16px 0;
+  }
+  .tip { background: var(--card); border-left: 4px solid var(--accent); padding: 12px 16px; border-radius: 8px; margin: 16px 0; }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 15px; }
+  th, td { border-bottom: 1px solid var(--line); text-align: left; padding: 8px 10px; vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; }
+  .features { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 18px 0; }
+  .features div { background: var(--card); border-radius: 10px; padding: 14px 16px; }
+  .features b { display: block; margin-bottom: 4px; }
+  .features span { color: var(--muted); font-size: 14px; }
+  @media (max-width: 860px) {
+    .layout { display: block; }
+    nav { position: static; width: auto; height: auto; border-right: none; border-bottom: 1px solid var(--line); padding: 20px 16px; }
+    main { padding: 24px 16px 60px; }
+    figure.small img, figure.medium img { max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+<nav>
+  <div class="brand">📂 LinkGroupz</div>
+  <p class="lang"><a href="../index.html">한국어</a> · <b>English</b></p>
+  <ol>
+    <li><a href="#intro">Overview</a></li>
+    <li><a href="#install">Installation</a></li>
+    <li><a href="#setup">First setup</a></li>
+    <li class="sub"><a href="#setup-extension">Extension (Chrome · Edge · Whale)</a></li>
+    <li class="sub"><a href="#setup-permissions">Permissions</a></li>
+    <li><a href="#use">Using LinkGroupz</a></li>
+    <li class="sub"><a href="#use-menubar">Menu bar</a></li>
+    <li class="sub"><a href="#use-manager">Manager</a></li>
+    <li class="sub"><a href="#use-preview">Preview</a></li>
+    <li class="sub"><a href="#use-edit">Edit list · move</a></li>
+    <li class="sub"><a href="#use-archive">Archive</a></li>
+    <li class="sub"><a href="#use-browser">Browser per group</a></li>
+    <li class="sub"><a href="#use-import-tabs">Import open tabs</a></li>
+    <li class="sub"><a href="#use-import-groups">Import tab groups</a></li>
+    <li class="sub"><a href="#use-search">Search</a></li>
+    <li><a href="#settings">Settings</a></li>
+    <li><a href="#update">Automatic updates</a></li>
+    <li><a href="#data">Data · update · uninstall</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ol>
+</nav>
+
+<main>
+<h1>LinkGroupz Guide</h1>
+<p class="lead">Keep the web pages you open every day in groups, and open a whole group in Chrome, Edge or Whale at once — or just one page — from the menu bar (the system tray on Windows).</p>
+<div class="callout">The pictures in this guide show LinkGroupz on macOS. On Windows, the menu bar is the taskbar tray, the data folder is <code>%APPDATA%\LinkGroupz</code> and the extension folder is <code>%APPDATA%\LinkGroupz\chrome-extension</code>. See INSTALL.md for installation.</div>
+
+<section id="intro">
+<h2>Overview</h2>
+<div class="features">
+  <div><b>Groups and pages</b><span>Give each group a color (19), an icon and tags, and each page an alias (display name).</span></div>
+  <div><b>Open in Chrome · Edge · Whale at once</b><span>Opens a named, colored tab group. Choose the browser per group.</span></div>
+  <div><b>Import open tabs and tab groups</b><span>Pick tabs or tab groups that are open now and save them as they are.</span></div>
+  <div><b>Preview</b><span>Check a page next to the list without opening the browser.</span></div>
+  <div><b>Search</b><span>Find by group name, <code>#tag</code>, alias or URL.</span></div>
+  <div><b>Edit list</b><span>Check items to delete or move them at once, and drag to reorder.</span></div>
+</div>
+<p>You need macOS 13 (Ventura) or later on an <b>Apple Silicon (M1 or later) Mac</b>, or Windows 10 · 11 (64-bit), and one of Google Chrome, Microsoft Edge or Naver Whale. It doesn't run on Intel Macs.</p>
+</section>
+
+<section id="install">
+<h2>Installation</h2>
+<ol class="steps">
+  <li>Double-click the downloaded <code>LinkGroupz-x.y.z.dmg</code>.</li>
+  <li>Drag the <b>LinkGroupz</b> icon to the <b>Applications</b> folder.</li>
+  <li>Open LinkGroupz from the Applications folder.</li>
+</ol>
+
+<h3 id="install-gatekeeper">If a security warning appears the first time</h3>
+<p>The app isn't notarized by Apple, so the first time you open it macOS blocks it with <i>“LinkGroupz” Not Opened</i>. Click <b>Done</b> and allow it once as follows. <b>Don't click “Move to Trash”.</b></p>
+<figure class="small">
+  <img src="../images/10-gatekeeper.png" alt="macOS warning that LinkGroupz was not opened">
+  <figcaption>The macOS warning on first launch (shown on Korean macOS). Click “Done”.</figcaption>
+</figure>
+<ol class="steps">
+  <li>Open <b>System Settings → Privacy &amp; Security</b>.</li>
+  <li>In the <b>Security</b> section near the bottom, click <b>Open Anyway</b> next to <i>“LinkGroupz” was blocked to protect your Mac.</i></li>
+  <li>Enter your Mac password (or use Touch ID) and click <b>Open Anyway</b> in the next window. This item only shows for about an hour after the warning, so if you can't see it, open the app once more.</li>
+</ol>
+<figure>
+  <img src="../images/11-open-anyway.png" alt="Open Anyway button in Privacy and Security settings">
+  <figcaption>System Settings → Privacy &amp; Security → Security: “Open Anyway” (shown on Korean macOS)</figcaption>
+</figure>
+<div class="tip">If you use Terminal, this one line does the same. Run it after moving the app to Applications.
+<pre><code>xattr -dr com.apple.quarantine /Applications/LinkGroupz.app</code></pre></div>
+</section>
+
+<section id="setup">
+<h2>First setup</h2>
+<p>The first time you open the app, the manager and the <b>Welcome</b> window appear. You can open the welcome window again any time from the LinkGroupz menu bar icon (three cards) → <b>Guide</b>. To have it start after a restart, turn on <b>Open at Login</b> in <a href="#settings">Settings</a>.</p>
+<figure class="medium">
+  <img src="images/01-welcome.png" alt="Welcome to LinkGroupz window">
+  <figcaption>The welcome window. Once the extension is installed, “Extension installed” shows on the right.</figcaption>
+</figure>
+
+<h3 id="setup-extension">Install the extension (recommended)</h3>
+<p>The app works without the extension, but with it you can:</p>
+<ul>
+  <li>Open groups as <b>named, colored tab groups</b> (otherwise all pages open in a new window)</li>
+  <li><b>Import the browser's tab groups</b> as they are</li>
+  <li>Import tabs <b>without touching the browser window</b></li>
+</ul>
+<ol class="steps">
+  <li>Enter <code>chrome://extensions</code> in Chrome's address bar. (You can copy it with the button in the welcome window.)</li>
+  <li>Turn on <b>Developer mode</b> at the top right.</li>
+  <li>Click <b>Load unpacked</b> and choose this folder:<br>
+      <code>~/Library/Application Support/LinkGroupz/chrome-extension</code><br>
+      <b>Show Extension Folder in Finder</b> in the welcome window opens it. In the folder picker you can also press <kbd>⌘</kbd><kbd>⇧</kbd><kbd>G</kbd> and paste the path.</li>
+  <li>You're done when the welcome window shows <b>Extension installed</b>.</li>
+</ol>
+<p>If you also use <b>Edge</b> or <b>Whale</b>, load the same folder there too. The extension is detected per browser.</p>
+<ul>
+  <li>Edge: <code>edge://extensions</code> → turn on <b>Developer mode</b> → <b>Load unpacked</b> → choose the same folder</li>
+  <li>Whale: <code>whale://extensions</code> → turn on <b>Developer mode</b> → <b>Load unpacked extension</b> → choose the same folder</li>
+</ul>
+<div class="callout">After updating the app to a new version, click the reload (⟳) button once on the <b>LinkGroupz Tab Groups</b> card on the extensions page (<code>chrome://extensions</code> · <code>edge://extensions</code> · <code>whale://extensions</code>) of each browser that has it.</div>
+
+<h3 id="setup-permissions">Allow these when macOS asks</h3>
+<table>
+  <tr><th>Prompt</th><th>When</th><th>Click</th></tr>
+  <tr><td>“LinkGroupz” wants access to control “Google Chrome” (or “Microsoft Edge” · “Whale”)</td><td>The first time you import open tabs from that browser without the extension</td><td>Allow</td></tr>
+  <tr><td>LinkGroupz wants to use your confidential information stored in “LinkGroupz Preview Sign-in Cookies” in your keychain</td><td>When you first open a preview, or click <b>Check Saved Sign-ins</b> in Settings (it may ask again after an update)</td><td>Enter your Mac login password, then <b>Always Allow</b></td></tr>
+</table>
+<figure class="medium">
+  <img src="../images/09-keychain.png" alt="Keychain access prompt">
+  <figcaption>Asked once when preview sign-ins are kept in the keychain. Enter your Mac login password and click “Always Allow” (shown on Korean macOS).</figcaption>
+</figure>
+</section>
+
+<section id="use">
+<h2>Using LinkGroupz</h2>
+
+<h3 id="use-menubar">Open from the menu bar</h3>
+<p>Click the LinkGroupz icon (three cards) in the menu bar at the top of the screen to see your groups.</p>
+<ul>
+  <li><b>Click a group card</b> → opens all its pages in the group's browser (the Chrome · Edge · Whale icon at the right end of the card). The number left of the icon is the page count.</li>
+  <li>Expand with <b>›</b> and <b>click a page</b> → opens just that page. Collapse a group with <b>⌄</b>, or all of them with <b>Collapse all groups</b> next to the search field.</li>
+  <li><a href="#use-sections">Sections</a> appear in the same order as in the manager. Click a section name to collapse or expand it.</li>
+  <li>Type in the search field at the top to filter right away; matching text is highlighted.</li>
+  <li><b>Keyboard</b>: when the window opens, choose a section, group or page with <kbd>↓</kbd> <kbd>↑</kbd> and open it with <kbd>Enter</kbd>. <kbd>→</kbd> expands a group or section and <kbd>←</kbd> collapses it. While searching, the top result is selected so you can open it with <kbd>Enter</kbd>. <kbd>Tab</kbd> opens the right-click menu of the selected row. <kbd>Esc</kbd> clears the search, and pressing it again closes the window.</li>
+  <li><b>Right-click</b>: right-click a section, group or page for the same menu as in the manager. Items that need typing or confirmation (edit, add page, preview, delete) continue in the manager.</li>
+  <li><b>Drag and drop</b>: drag groups, sections and pages to reorder them, drop a group on a section header to put it in that section, and drop a page on another group to move it there.</li>
+  <li><b>Window size</b>: drag the window edges to resize; it keeps that size. To reset, use the 📌 button at the bottom → <b>Reset Window Size</b>.</li>
+  <li><b>Detach from the menu bar</b>: 📌 → <b>Detach from Menu Bar</b>. A detached window doesn't close when you click elsewhere, and you can drag it by the top strip or around the search field to put it anywhere (it opens there next time). It stays open after you open a group. 📌 → <b>Attach to Menu Bar</b> puts it back.</li>
+  <li>Buttons at the bottom: <b>Manage</b> (manager) · <b>Settings</b> · <b>Guide</b> (welcome window) · 📌 (detach · window size) · <b>Quit</b></li>
+</ul>
+<figure class="small">
+  <img src="images/02-menubar.png" alt="Menu bar window with a group expanded to show its pages">
+  <figcaption>The menu bar window. Each page shows its site icon.</figcaption>
+</figure>
+
+<h3 id="use-manager">Manager</h3>
+<p>It opens the first time you start the app; after that, open it with <b>Manage</b> at the bottom of the menu bar window or from the Dock icon. To open the manager every time the app starts, set Settings → <b>Window at launch</b> to <b>Manager</b> (the default is the menu bar window). If the app is already running, opening LinkGroupz again from the Applications folder brings the manager to the front. (It doesn't open when the app starts at login.) Sections and group cards are on the left, the selected group's pages on the right. The current version and the <b>Settings</b> button are at the bottom right.</p>
+<p>Hide the sidebar with the ▥ button at the top of the sidebar, and show it again with the same button at the top left of the window.</p>
+<figure>
+  <img src="images/03-manager.png" alt="The manager with the group list on the left and pages on the right">
+  <figcaption>The manager</figcaption>
+</figure>
+<table>
+  <tr><th>To do this</th><th>Do this</th></tr>
+  <tr><td>New group</td><td><b>New Group</b> below the search field on the left, or right-click the group list → <b>New Group</b></td></tr>
+  <tr><td>Change a group's name, color, icon or tags</td><td>The pencil ✎ next to the group name. Pick one of 40 built-in icons (folder · code · server · DB · chart, etc.) or use your own with <b>Choose Image…</b>. Your image is cropped to a square from the center and copied to the app data folder, so it stays even if you delete the original. There are 19 colors; Chrome tab groups only have 9, so app-only colors (navy · mint · coral, etc.) open in the closest Chrome color</td></tr>
+  <tr><td>Add a page</td><td><b>Add Page</b> → URL · alias (if the alias is empty, the address is shown)</td></tr>
+  <tr><td>Open a whole group</td><td><b>Open Group</b>, or double-click the group in the list on the left</td></tr>
+  <tr><td>Open a page</td><td>Double-click the page, or right-click → <b>Open</b></td></tr>
+  <tr><td>Open in a new window</td><td>Right-click a group or page → <b>Open in New Window</b>. Even if the browser is already open, it opens a new window instead of adding to the current one (as a tab group in that window with the extension)</td></tr>
+  <tr><td>Open in a private window</td><td>Right-click a group or page → <b>Open in Private Window</b>, or the hat-and-glasses button at the right of a page row. Opens a new private window (an InPrivate window in Edge) of the group's browser. When you close a private window opened from the manager, the manager comes back to the front (macOS)</td></tr>
+  <tr><td>Always open a group privately</td><td>Edit the group (pencil ✎) → <b>Always Open in Private Window</b> under Browser, or right-click the group → <b>Always Open in Private Window</b>. Such groups always open in a private window — from the group, a page or the menu bar — and their card shows a hat-and-glasses mark</td></tr>
+  <tr><td>Edit or delete a page</td><td>✎ · 🗑 at the right of the row (the trash deletes right away without asking)</td></tr>
+  <tr><td>Skip a page when the group opens</td><td>Turn off the switch at the left end of the page row. Pages that are off look dimmed and don't open with the group (they still open on their own). It's saved in the same format as the original LinkGroups</td></tr>
+  <tr><td>Search in this group</td><td><b>Search in this group</b> on the group name row. Finds page names and URLs in that group and highlights matches</td></tr>
+  <tr><td>Sync with a browser tab group</td><td>The ⟳ button next to the group name (or right-click the group → <b>Sync with Browser Tab Group…</b>). Compares with the tab group of the same name open in the group's browser, so you can add pages that are only in the browser and remove pages that are only in this group. <b>Replace All</b> makes it match the tab group exactly (including order). It reads without touching the browser</td></tr>
+  <tr><td>Keyboard</td><td><kbd>⌘</kbd><kbd>1</kbd> (<kbd>Ctrl</kbd><kbd>1</kbd> on Windows) search field · <kbd>↓</kbd> into the group list · <kbd>↑</kbd> <kbd>↓</kbd> between groups and sections · on a section, <kbd>←</kbd> <kbd>→</kbd> collapse and expand · on a group, <kbd>→</kbd> to the page list; in the page list, <kbd>←</kbd> back to the group list · <kbd>Return</kbd> open · <kbd>Tab</kbd> right-click menu</td></tr>
+  <tr><td>Undo</td><td><kbd>⌘</kbd><kbd>Z</kbd> (<kbd>Ctrl</kbd><kbd>Z</kbd> on Windows) undoes what you just did, and <kbd>⌘</kbd><kbd>⇧</kbd><kbd>Z</kbd> (<kbd>Ctrl</kbd><kbd>Y</kbd> or <kbd>Ctrl</kbd><kbd>⇧</kbd><kbd>Z</kbd> on Windows) redoes it. It covers changes to groups, pages, sections and the archive (add · edit · delete · move · archive · restore · switches · sync · import), in the menu bar window too. The last 50 changes per profile are kept while the app is running and cleared when you quit. In a text field, it undoes your typing instead. Tabs opened in the browser and settings aren't undone</td></tr>
+  <tr><td>Reorder</td><td>Drag and drop groups and pages. A blue line shows where a group will go (<a href="#use-sections">Sections</a>)</td></tr>
+  <tr><td>Select several groups</td><td><kbd>⌘</kbd> (<kbd>Ctrl</kbd> on Windows) or <kbd>⇧</kbd> click. Selected cards get a blue top-left corner. Drag them together, or right-click to move them to a section or the archive, or delete them at once</td></tr>
+  <tr><td>Move to another group</td><td>Drag a page onto a group on the left, or right-click → <b>Move to Group</b></td></tr>
+  <tr><td>Put away without deleting</td><td>Right-click a group or page → <b>Move to Archive</b> (<a href="#use-archive">Archive</a>)</td></tr>
+</table>
+<figure class="medium">
+  <img src="images/12-group-edit.png" alt="Edit group window with name, 19 colors, icon, browser and tags">
+  <figcaption>Edit Group. The top row of colors matches Chrome tab groups; the bottom row is app-only. Icons: 40 built-in shapes or your own image.</figcaption>
+</figure>
+
+<h3 id="use-profiles">Profiles</h3>
+<p>To keep completely separate group lists — for example work and personal — create profiles. Each profile has its own groups, sections, archive and backups, and the manager, the menu bar window and search show only the <b>current profile</b>.</p>
+<table>
+  <tr><th>To do this</th><th>Do this</th></tr>
+  <tr><td>Create a profile</td><td>Settings → <b>Profiles</b>: type a name and click <b>Add</b>. Your original list is the <b>Default</b> profile</td></tr>
+  <tr><td>Switch profiles</td><td>The profile button (👥 name ▾) left of the search field in the menu bar window or at the top left of the manager, right-click the menu bar icon → <b>Profiles</b>, or <b>Switch</b> in Settings → Profiles. All windows switch together, and the app starts with that profile next time</td></tr>
+  <tr><td>Rename, change icon or color, delete</td><td><b>Edit</b> (40 built-in icons or your own image, 19 colors, like group icons) · <b>Delete</b> in Settings → Profiles. The icon shows on the profile button. The default profile can't be deleted. A deleted profile's data isn't erased but moved to <code>deleted-profiles</code> in the backup folder, so you can bring it back by importing the <code>data.json</code> inside</td></tr>
+</table>
+<p>Export, import, automatic backups and restore in Settings → Data · Backups apply to the current profile. Other settings, such as the extension, shortcut and how groups open, are shared by all profiles.</p>
+
+<h3 id="use-sections">Sections</h3>
+<p>With many groups, fold them into sections. The order is section &gt; group &gt; page, and groups are what you open. Sections and groups outside sections can be mixed in any order, and groups inside a section are indented. An expanded section has a line under its last group.</p>
+<table>
+  <tr><th>To do this</th><th>Do this</th></tr>
+  <tr><td>Create a section</td><td>The <b>Section</b> button above the group list, right-click an empty part of the list → <b>New Section</b>, right-click a group → <b>New Section</b> (creates a section in that group's place with the group in it), or drag a group onto another group (creates a section with both)</td></tr>
+  <tr><td>Put groups in or take them out</td><td>Drag a group onto a section name or between groups in a section, right-click a group → <b>Section</b>, right-click a section → <b>Add Group</b>, or <b>Section</b> in Edit Group. To take it out: right-click → <b>Section</b> → <b>No section</b>, or drag it to the line at the end of the section or outside it</td></tr>
+  <tr><td>New group in a section</td><td>Right-click the section → <b>New Group…</b></td></tr>
+  <tr><td>Collapse or expand</td><td>Click the section name. The menu bar window follows</td></tr>
+  <tr><td>Reorder</td><td>Drag the section name, or right-click the section → <b>Move Up</b> · <b>Move Down</b></td></tr>
+  <tr><td>Rename or delete</td><td>Right-click the section → <b>Edit Section…</b> · <b>Delete Section…</b> (its groups stay where the section was)</td></tr>
+</table>
+<p>When you drag a group, dropping it on the upper or lower part of a row moves it there (a line shows), and dropping it in the middle of a group outside sections creates a section with both (a blue outline). An indented line means inside the section; a line to the left edge means outside.</p>
+<p>Sections are saved in <code>data.json</code> in the same format as the original LinkGroups, so they read correctly in both apps.</p>
+
+<h3 id="use-preview">Preview</h3>
+<p>Click 👁 at the right of a page row to show a preview next to it. <b>Open Larger</b> opens it in a full-size window. Drag the edges of a preview window to resize it; it opens at that size next time (separately for the small preview and the larger window).</p>
+<figure class="medium">
+  <img src="images/04-preview.png" alt="Page preview">
+  <figcaption>Preview: “Open Larger” · “Open in Chrome (or Edge · Whale)”</figcaption>
+</figure>
+<div class="tip"><b>Sites that need sign-in</b>: previews don't use the sign-ins of Chrome, Edge or Whale. Sign in once in the <b>Open Larger</b> window; the sign-in cookies are encrypted in the keychain and later previews show you signed in. When the cookies expire, sign in again.</div>
+
+<h3 id="use-edit">Edit list · delete or move at once</h3>
+<p>Click <b>Edit List</b> above the group list or the page list to show checkboxes. You can then <b>Archive</b>, <b>Delete</b> or <b>Move to Group</b> the checked items at once. You can also select several with <kbd>⌘</kbd> or <kbd>⇧</kbd> click.</p>
+<figure>
+  <img src="images/05-edit.png" alt="Editing the list with two pages checked">
+  <figcaption>Edit list. The first checkbox selects or deselects all</figcaption>
+</figure>
+<p>If the target group already has the same address, the page isn't added twice; it's only removed from the original group.</p>
+
+<h3 id="use-archive">Archive</h3>
+<p>Put groups and pages you don't need right now — but don't want to delete — in the archive. Archived items don't appear in the menu bar, the group list or search, and you can bring them back any time.</p>
+<table>
+  <tr><th>To do this</th><th>Do this</th></tr>
+  <tr><td>Archive</td><td>Right-click a group or page → <b>Move to Archive</b>. You can select several. Or check items in <b>Edit List</b> and click <b>Archive</b></td></tr>
+  <tr><td>Open the archive</td><td>The green <b>Archive</b> button at the bottom of the group list in the manager (the number is how many are archived)</td></tr>
+  <tr><td>See archived items</td><td><b>Archived Groups</b> and <b>Archived Pages</b> start collapsed; expand them with ›. Expand an archived group once more to see its pages</td></tr>
+  <tr><td>Search the archive</td><td>The search field at the top right of the archive. Same rules as the manager search (all words must match, <code>#tag</code> only matches tags), and archived pages also match the name of the group they came from. Only sections with results are expanded</td></tr>
+  <tr><td>Restore a group</td><td><b>Restore</b> on the archived group row → it goes back to the end of the group list. Pages, icon and browser stay the same</td></tr>
+  <tr><td>Restore a page</td><td>Choose a group from the <b>Restore</b> menu of an archived page. The original group is at the top if it still exists, and <b>New Group…</b> creates a group with the original group's name and color</td></tr>
+  <tr><td>Delete for good</td><td>🗑 at the right of the row → <b>Delete Permanently</b> (you can undo with <kbd>⌘</kbd><kbd>Z</kbd> until you quit the app)</td></tr>
+  <tr><td>Archive or restore by dragging</td><td>Drop a group, section or page on the <b>Archive</b> button at the bottom left to archive it (a section archives its groups and is removed). In the archive, drag a group into the group list on the left to restore it right there, or a page onto a group to restore it into that group</td></tr>
+  <tr><td>Organize inside the archive</td><td>Drop an archived page on an archived group to put it inside, and drag archived groups, or pages inside an archived group, to reorder them. An expanded archived group has <b>Restore</b> and 🗑 for each page</td></tr>
+  <tr><td>Open directly</td><td>Double-click an archived group or page to open it without restoring. Clicking the “Archived Groups” or “Archived Pages” title also expands it</td></tr>
+</table>
+<p>If the group you restore a page to already has the same address, it isn't added again; it's only removed from the archive.</p>
+
+<h3 id="use-browser">Browser per group (Chrome · Edge · Whale)</h3>
+<p>Each group has the browser it opens in. New groups use <b>Chrome</b>, and the icon at the right end of a group card in the list or the menu bar shows which browser it uses.</p>
+<ul>
+  <li><b>Change it</b>: the browser button left of “Open Group” on the group page, right-click the group → <b>Browser</b>, or <b>Browser</b> in Edit Group (pencil ✎)</li>
+  <li>A single page in a group also opens in that group's browser.</li>
+  <li>Groups made by importing tab groups from Edge or Whale start with that browser.</li>
+</ul>
+
+<h3 id="use-import-tabs">Import open tabs</h3>
+<p>Click <b>Import Open Tabs</b> on a group page and choose Chrome, Edge or Whale under <b>Browser</b> at the top to see that browser's open tabs by window and tab group. Pick some and click <b>Add</b> to put them in the group.</p>
+<ul>
+  <li>The checkbox on a window or tab group row selects or deselects all its tabs</li>
+  <li>Addresses already in the group show as <b>Already added</b> and can't be picked.</li>
+  <li>With <b>Use tab titles as aliases</b> on, tab titles become display names.</li>
+</ul>
+<figure>
+  <img src="images/06-import-tabs.png" alt="Import open tabs, with tabs grouped by tab group">
+  <figcaption>Import open tabs</figcaption>
+</figure>
+
+<h3 id="use-import-groups">Import tab groups</h3>
+<p><b>Import Tab Groups</b> below the search field in the manager turns the chosen browser's (Chrome · Edge · Whale) tab groups into groups with the same name and color. New groups open in the browser they came from. Even without the extension, tab groups are read from the session the browser saves.</p>
+<ul>
+  <li>If a group with the same name exists, the pages are <b>added to the existing group</b> instead of creating a new one.</li>
+  <li>Pages already in the existing group are skipped as <b>Already added</b>.</li>
+  <li>The button shows what will happen, for example <i>Import (2 new groups · added to 1 existing group · 6 pages)</i></li>
+  <li>Turn on <b>Show closed tab groups</b> to list the closed tab groups saved in the browser, collapsed, below the list. Pick from them like open groups. If the browser is closed, all saved groups are shown as closed.</li>
+</ul>
+<figure>
+  <img src="images/13-closed-groups.png" alt="Import tab groups with Show closed tab groups turned on">
+  <figcaption>With “Show closed tab groups” on, a “Closed tab groups” part appears below the list</figcaption>
+</figure>
+<div class="callout"><b>Note</b>: tabs that aren't in a tab group don't appear here. Create a group with <b>New Group</b> first, then add them with <b>Import Open Tabs</b> on that group's page.</div>
+<figure>
+  <img src="images/07-import-groups.png" alt="Import tab groups">
+  <figcaption>Import tab groups</figcaption>
+</figure>
+
+<h3 id="use-search">Search</h3>
+<table>
+  <tr><th>Type</th><th>Finds</th></tr>
+  <tr><td><code>wiki</code></td><td>Items whose group name, tag, alias or URL contains “wiki”</td></tr>
+  <tr><td><code>#work</code></td><td>Groups tagged “work”</td></tr>
+  <tr><td><code>#work jira</code></td><td>Pages containing “jira” in groups tagged “work” (all words must match)</td></tr>
+</table>
+<p>Matching text is highlighted in yellow in group names, tags, page names and URLs. While searching, every section with a matching group is expanded. Search in the menu bar window works the same way.</p>
+<p><b>Choose where to search</b>: in the filter (funnel) button next to the search field, turn <b>Name</b> (groups · pages), <b>Tags</b> and <b>URL</b> on or off. The manager, the menu bar window and the archive share it, and the button turns blue when only some are on. A <code>#tag</code> word always searches tags.</p>
+<figure>
+  <img src="images/14-search.png" alt="Searching for rust in the manager, with matches highlighted in yellow">
+  <figcaption>Search. Only matching groups remain, and only matching pages show on the right</figcaption>
+</figure>
+</section>
+
+<section id="settings">
+<h2>Settings</h2>
+<p>Open it with <b>Settings</b> at the bottom of the menu bar window or at the bottom right of the manager.</p>
+<p>Turn on <b>Open at Login</b> to have LinkGroupz appear in the menu bar when you restart or log in again. No window opens then.</p>
+<p>Add, edit (name · icon · color) and delete profiles in <b>Profiles</b> (<a href="#use-profiles">Profiles</a>).</p>
+<p><b>Appearance</b>: in <b>Appearance</b> near the bottom of Settings, choose <b>System</b>, <b>Light</b> or <b>Dark</b>. With System, the app follows the macOS or Windows appearance. Open windows change right away.</p>
+<p><b>Language</b>: in <b>Language</b> near the bottom of Settings, choose <b>System</b>, <b>한국어</b> or <b>English</b>. With System, the app is in Korean when macOS or Windows is set to Korean, and in English otherwise. Open windows update right away.</p>
+<p><b>Window at launch</b>: when you open the app yourself, the <b>menu bar</b> window (default) or the <b>Manager</b> opens. The first time, the welcome window and the manager open.</p>
+<p>With <b>Show in Dock</b> on (the default, macOS), you can switch back to LinkGroupz from the Dock or with ⌘Tab, and clicking the Dock icon opens the manager. Turn it off to use only the menu bar icon.</p>
+<p><b>Shortcut</b>: open the menu bar window from the keyboard without clicking the icon. Click <b>None</b> under Settings → Shortcut and press the shortcut you want (e.g. ⌥Space). It works from any app, and you can search right away. Pressing it again while the window is open opens the manager. Remove it with <b>Clear</b>.</p>
+<figure class="medium">
+  <img src="images/08-settings.png" alt="Settings">
+  <figcaption>Settings</figcaption>
+</figure>
+<table>
+  <tr><th>How groups open</th><th>What happens</th></tr>
+  <tr><td>Auto (default)</td><td>A tab group if the group's browser has the extension, otherwise all pages in a new window</td></tr>
+  <tr><td>Always a tab group</td><td>Always a tab group (without the extension, an error page opens)</td></tr>
+  <tr><td>Always a new window</td><td>Always all pages in a new window of the group's browser</td></tr>
+</table>
+<p><b>Updates</b> shows the current version and the update status, and turns automatic checks on or off (<a href="#update">Automatic updates</a>).</p>
+<p><b>Check Saved Sign-ins</b> in <b>Preview Sign-in</b> shows how many sites are saved (macOS may ask for your keychain password because it reads the keychain). You can also clear preview sign-ins here.</p>
+<p><b>Data · Backups</b> (<a href="#data">Data</a>)</p>
+<table>
+  <tr><th>To do this</th><th>Do this</th></tr>
+  <tr><td>Move to another computer or keep a copy</td><td><b>Export…</b> saves groups, pages, sections and the archive to a single file. Custom group icon images are included</td></tr>
+  <tr><td>Import from a file</td><td>Choose a file with <b>Import…</b>; it shows what's inside, then choose <b>Replace with This</b> (replace your list with the file) or <b>Add to Current List</b>. You can also import the original LinkGroups <code>data.json</code>. The list from before a replace is kept in the backup folder</td></tr>
+  <tr><td>Automatic backups</td><td>Once a day, the state at the start of the day is backed up (custom group icon images too). Keep them <b>Off · 3 · 7 (default) · 14 · 30 days · Unlimited</b>; older backups are deleted (never, if unlimited)</td></tr>
+  <tr><td>Go back to an earlier state</td><td>Pick a date in the backup list and click <b>Restore</b>. The list right before restoring is kept too, so you can go back again</td></tr>
+</table>
+</section>
+
+<section id="update">
+<h2>Automatic updates</h2>
+<p>New versions are published on the LinkGroupz releases page (<b>Open Releases Page</b> in Settings → Updates). The app checks it and updates itself. The current version shows at the bottom right of the manager and in Settings → Updates, and ↻ in Settings → Updates checks for a new version right away.</p>
+<table>
+  <tr><th>To do this</th><th>Do this</th></tr>
+  <tr><td>Check now</td><td>↻ in Settings → Updates. If there's a new version, an <b>Update to x.y.z</b> button appears, and <b>New version x.y.z</b> shows at the bottom right of the manager</td></tr>
+  <tr><td>Update</td><td>The <b>Update to x.y.z</b> button in Settings, or <b>Update Now</b> in the update window. A progress bar fills as it downloads and installs, the signature is checked, and LinkGroupz quits briefly and opens again (Windows installs without an installer window too). Your groups, pages, archive and settings stay as they are</td></tr>
+  <tr><td>Turn automatic checks off or on</td><td><b>Check for updates automatically</b> in Settings → Updates. Even when it's off, you can check with ↻</td></tr>
+</table>
+<ul>
+  <li>With automatic checks on (the default), the app checks 30 seconds after it starts and every hour after that. When there's a new version, the update window shows what's new and asks <b>Update Now</b> / <b>Later</b>.</li>
+  <li>A version you postpone with <b>Later</b> isn't asked about again until a newer one comes out. You can still update from Settings in the meantime.</li>
+  <li>Downloaded files are installed only if their signature matches. If it doesn't, the update window says “The downloaded file's signature didn't match, so it wasn't installed.” and nothing changes.</li>
+  <li>If macOS asks for keychain access after an update, enter your Mac login password and click <b>Always Allow</b>. If you use the extension, reload it once in the browser.</li>
+  <li>The first time you open the app after an update, a window shows what's new. You can see it again with <b>What's New</b> in Settings → Updates.</li>
+</ul>
+</section>
+
+<section id="data">
+<h2>Data · update · uninstall</h2>
+<table>
+  <tr><th>What</th><th>Where</th></tr>
+  <tr><td>Groups · pages · archive</td><td><code>~/Library/Application Support/LinkGroupz/data.json</code></td></tr>
+  <tr><td>Automatic backups</td><td><code>~/Library/Application Support/LinkGroupz/backups</code></td></tr>
+  <tr><td>Groups and backups of added profiles</td><td><code>~/Library/Application Support/LinkGroupz/profiles/&lt;profile id&gt;</code> (the default profile uses <code>data.json</code> · <code>backups</code> above)</td></tr>
+  <tr><td>Chrome extension</td><td><code>~/Library/Application Support/LinkGroupz/chrome-extension</code></td></tr>
+  <tr><td>Site icons</td><td><code>~/Library/Application Support/LinkGroupz/favicons</code></td></tr>
+  <tr><td>Group icon images</td><td><code>~/Library/Application Support/LinkGroupz/icons</code></td></tr>
+  <tr><td>Preview sign-in cookies</td><td>The keychain item “LinkGroupz Preview Sign-in Cookies”</td></tr>
+</table>
+<p><b>Back up or move to another Mac</b>: save a file with <b>Export…</b> in Settings → Data · Backups, and bring it in with <b>Import…</b> on the other Mac. Automatic backups are set and restored in the same place (<a href="#settings">Settings</a>).</p>
+<p><b>Update</b>: with automatic updates on, the app asks and installs by itself (<a href="#update">Automatic updates</a>). To do it yourself, copy LinkGroupz from the new DMG over the one in Applications and reload the extension in the browsers that have it (Chrome · Edge · Whale). Your data stays.</p>
+<p><b>Uninstall</b>: <b>Quit</b> in the menu bar window → move LinkGroupz in Applications to the Trash → remove the extension from Chrome · Edge · Whale. To delete your data too, delete the <code>LinkGroupz</code> folder above and the keychain item.</p>
+</section>
+
+<section id="faq">
+<h2>FAQ</h2>
+<h3>Groups or pages disappeared from the list</h3>
+<p>First check the profile button (top left of the menu bar window and the manager) — you may have switched to another profile. Then open the <b>Archive</b> at the bottom left of the manager. Archived items don't appear in the list, the menu bar or search; <b>Restore</b> them from there. If you just deleted something by mistake, undo with <kbd>⌘</kbd><kbd>Z</kbd> (<kbd>Ctrl</kbd><kbd>Z</kbd> on Windows); if you've restarted the app since, <b>Restore</b> the previous day's backup in Settings → Data · Backups.</p>
+<h3>The welcome window keeps saying “Waiting for the extension”</h3>
+<p>Check in <code>chrome://extensions</code> that LinkGroupz Tab Groups is <b>on</b> and that the loaded folder is <code>~/Library/Application Support/LinkGroupz/chrome-extension</code>. It's detected even in another Chrome profile. For Edge, check the same in <code>edge://extensions</code>. Settings shows what's detected per browser.</p>
+<h3>A group opens as plain tabs instead of a tab group</h3>
+<p>Check that the group opening mode in Settings isn't <b>Always a new window</b> and that the extension is detected. After updating the app, reload the extension in the browsers that have it.</p>
+<h3>A <code>linkgroupz.invalid</code> error page opens</h3>
+<p>It appears when the app tries to open a tab group without the extension, or with the extension turned off. Turn the extension on, or set the group opening mode in Settings to <b>Auto</b>.</p>
+<h3>The preview keeps showing a sign-in page</h3>
+<p>Sign in in the preview's <b>Open Larger</b> window. When the keychain prompt appears, click <b>Always Allow</b> so the sign-in is saved.</p>
+<h3>Import Open Tabs shows nothing</h3>
+<p>The chosen browser must be running. Without the extension, you need to allow “control Google Chrome (or Microsoft Edge · Whale)”. If you denied it, turn on the browser for LinkGroupz in <b>System Settings → Privacy &amp; Security → Automation</b>.</p>
+<h3>The browser window flashes when importing tabs</h3>
+<p>LinkGroupz reads open tabs and tab groups from the session file the browser saves by itself, without touching the browser. Only when that file can't be read does it briefly open a temporary tab to get them from the extension, which brings the browser to the front for a moment. Tabs you changed a few seconds ago may not be saved yet, so try again shortly.</p>
+<h3>LinkGroupz, Edge or Whale isn't in the Automation list</h3>
+<p>The list only shows items macOS has asked about after the app actually tried to control that browser; you can't add them yourself. With the extension, LinkGroupz doesn't control the browser, so it's normal not to be listed. It appears after the first time you import open tabs from that browser without the extension. Opening groups doesn't need this permission.</p>
+<h3>Edge (or Chrome · Whale) doesn't open a private window</h3>
+<p>If your organization's policy turns off private (InPrivate) windows in that browser, the browser opens a normal window instead. LinkGroupz doesn't open it in a normal window and shows a message instead. Switch that group to another browser to open it privately.</p>
+<h3>A LinkGroupz icon appeared in the Dock</h3>
+<p>It shows in the Dock by default. To use only the menu bar icon, turn off Settings → <b>Show in Dock</b>.</p>
+<h3>LinkGroupz doesn't start after a restart</h3>
+<p>Check that <b>Open at Login</b> is on in Settings. If it is and it still doesn't start, check that LinkGroupz is allowed in <b>System Settings → General → Login Items</b>. An app running from the DMG can't be registered, so move it to the Applications folder first.</p>
+<h3>Checking for updates fails</h3>
+<p>“Couldn't check for a new version” means you should check your internet connection. “There is no release for this computer yet” means that version isn't out yet for this computer (OS · CPU).</p>
+<h3>The keychain password prompt appears again</h3>
+<p>After the app is updated, macOS may ask again for access to the preview sign-in cookies. Enter your Mac login password and click <b>Always Allow</b>; it won't ask again for that version.</p>
+</section>
+</main>
+</div>
+</body>
+</html>

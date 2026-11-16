@@ -1,0 +1,52 @@
+# 자동 점검: 테스트 · 알려진 취약점 · 라이선스 고지.
+#
+# main 에 올릴 때와 버전 태그를 올릴 때 돈다. (Actions 화면에서 직접 돌릴 수도 있다)
+# 화면 앱(Tauri)은 Linux 에서 빌드하지 않는다. 점검에 필요한 core · host 와 의존성 목록만 본다.
+name: 점검
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Rust 준비
+        run: |
+          rustup toolchain install stable --profile minimal --no-self-update
+          rustup default stable
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+            target
+          key: check-cargo-${{ hashFiles('Cargo.lock') }}
+          restore-keys: check-cargo-
+
+      - name: 점검 도구 설치 (cargo-audit · cargo-about)
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-audit@0.23.0,cargo-about@0.9.3
+
+      - name: 테스트 (core · host)
+        run: cargo test -p linkgroupz-core -p linkgroupz-host
+
+      # 알려진 취약점이 있는 크레이트를 쓰면 실패한다 (관리 중단 · 안전성 경고는 실패로 보지 않고 기록만 한다).
+      - name: 알려진 취약점 점검
+        run: cargo audit
+
+      # 앱에 넣는 라이선스 고지가 지금 의존성과 같은지. 다르면 `cargo xtask licenses` 로 다시 만들어 커밋한다.
+      - name: 라이선스 고지 점검
+        run: cargo xtask licenses --check

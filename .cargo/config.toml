@@ -1,0 +1,3 @@
+[alias]
+# 아이콘 만들기 · 배포 파일 만들기: `cargo xtask --help`
+xtask = "run --release -p xtask --"

@@ -1,0 +1,59 @@
+[package]
+name = "linkgroupz-core"
+description = "LinkGroupz 의 모델 · 저장소 · 검색 · 브라우저 연동 (화면과 무관한 부분)"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+base64.workspace = true
+chrono.workspace = true
+dirs.workspace = true
+image.workspace = true
+percent-encoding.workspace = true
+regex.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+unicode-normalization.workspace = true
+url.workspace = true
+uuid.workspace = true
+
+[target.'cfg(target_os = "macos")'.dependencies]
+objc2 = "0.6"
+objc2-app-kit = { version = "0.3", default-features = false, features = [
+    "std",
+    "libc",
+    "NSBitmapImageRep",
+    "NSGraphicsContext",
+    "NSImage",
+    "NSImageRep",
+    "NSRunningApplication",
+    "NSWorkspace",
+    "objc2-core-graphics",
+] }
+objc2-core-graphics = { version = "0.3", default-features = false, features = ["std", "CGImage"] }
+objc2-foundation = { version = "0.3", default-features = false, features = [
+    "std",
+    "NSAppleEventDescriptor",
+    "NSAppleScript",
+    "NSArray",
+    "NSData",
+    "NSDate",
+    "NSDictionary",
+    "NSGeometry",
+    "NSString",
+    "NSURL",
+    "NSValue",
+] }
+security-framework = "3"
+
+[target.'cfg(windows)'.dependencies]
+file_icon_provider = "1"
+keyring = { version = "3", default-features = false, features = ["windows-native"] }
+sysinfo = { version = "0.37", default-features = false, features = ["system"] }
+winreg = "0.55"
+
+[dev-dependencies]
+tempfile.workspace = true

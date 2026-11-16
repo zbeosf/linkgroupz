@@ -1,0 +1,676 @@
+/* 관리 창: 왼쪽 그룹 목록 + 오른쪽 그룹 화면 */
+
+#app {
+  display: flex;
+  height: 100%;
+}
+
+/* MARK: 사이드바 */
+
+/* 왼쪽 목록을 감싸는 틀. 숨기면 폭을 0 으로 줄이며 목록을 왼쪽으로 밀어 넣는다. */
+.sidebar-frame {
+  --sidebar-width: 300px;
+  --sidebar-gap: 0px;
+  display: flex;
+  flex: none;
+  width: calc(var(--sidebar-width) + var(--sidebar-gap));
+  overflow: hidden;
+  transition: width 0.24s cubic-bezier(0.2, 0.8, 0.2, 1), padding 0.24s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.sidebar-frame.collapsed {
+  width: 0;
+  padding-left: 0;
+}
+
+.sidebar-frame.collapsed .sidebar {
+  transform: translateX(-100%);
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  flex: none;
+  width: var(--sidebar-width);
+  transition: transform 0.24s cubic-bezier(0.2, 0.8, 0.2, 1);
+  background: var(--sidebar);
+  border-right: 0.5px solid var(--border);
+}
+
+/* 맨 윗줄: 프로필 · 목록 숨기기 (macOS 는 왼쪽에 신호등 버튼) */
+.sidebar .profile-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 6px 0 10px;
+}
+
+.sidebar .profile-row .btn.profile-switcher {
+  min-width: 0;
+}
+
+/* 왼쪽 목록의 검색창은 회색으로 채운다 */
+.sidebar .search .field {
+  border-color: transparent;
+  background: var(--control);
+}
+
+.sidebar .top {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 6px 0 10px;
+}
+
+.sidebar .top .search {
+  flex: 1 1 auto;
+}
+
+/* 목록을 숨겼을 때 그룹 화면 왼쪽 위의 '목록 보기' */
+.detail .show-sidebar {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+}
+
+:root:not([data-platform="macos"]) .detail.sidebar-hidden .group-header {
+  padding-left: 52px;
+}
+
+.sidebar .buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 12px 10px 4px;
+}
+
+.sidebar .buttons .btn {
+  flex: 1 1 auto;
+}
+
+.sidebar .summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+}
+
+.group-list {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0 10px 6px;
+  outline: none;
+}
+
+.group-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2.5px 0;
+}
+
+.group-row .group-card {
+  flex: 1 1 auto;
+  padding: 0 14px;
+}
+
+.group-row {
+  position: relative;
+}
+
+/* 놓일 자리 표시. 섹션 안이면 들여 그리고, 섹션 밖이면 왼쪽 끝부터 그린다 */
+.group-row.insert-before::before,
+.group-row.insert-after::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--accent);
+}
+
+.group-row.insert-before::before {
+  top: -1px;
+}
+
+.group-row.insert-after::after {
+  bottom: -1px;
+}
+
+.group-row.in-section.insert-before::before,
+.group-row.in-section.insert-after::after {
+  left: 14px;
+}
+
+.group-row.dragging {
+  opacity: 0.45;
+}
+
+/* 섹션 안 그룹은 들여 쓴다 */
+.group-row.in-section {
+  padding-left: 14px;
+}
+
+/* 여러 개 고른 그룹: 왼쪽 위 모서리를 파랗게 */
+/* 고른 카드: 왼쪽 위 모서리의 파란 삼각형 */
+.group-card.marked {
+  background-image: linear-gradient(135deg, var(--accent) 0 11px, transparent 11px);
+}
+
+/* 섹션 머리줄 */
+.section-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  margin-top: 6px;
+  padding: 0 6px;
+  border-radius: 6px;
+  color: var(--secondary);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.section-row:hover {
+  background: var(--hover);
+}
+
+.section-row .name {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--text);
+}
+
+.section-row .count {
+  font-size: 11.5px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.section-row.drop-target {
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+.section-row.insert-before {
+  box-shadow: 0 -2px 0 var(--accent);
+}
+
+.section-row.insert-after {
+  box-shadow: 0 2px 0 var(--accent);
+}
+
+/* 펼친 섹션 끝의 가로줄. 여기에 놓으면 섹션 밖(섹션 바로 뒤)으로 간다 */
+.section-end {
+  position: relative;
+  height: 9px;
+  margin: 0 2px 2px;
+}
+
+.section-end::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 4px;
+  border-top: 1px solid var(--border);
+}
+
+.section-end.insert-after::after {
+  border-top: 2px solid var(--accent);
+}
+
+/* 목록 아래 빈 곳 (여기에 놓으면 맨 끝, 오른쪽 클릭 메뉴) */
+.list-end {
+  flex: 1 1 auto;
+  min-height: 48px;
+}
+
+.list-end.insert-before {
+  box-shadow: 0 -2px 0 var(--accent);
+}
+
+.sidebar .edit-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+}
+
+.archive-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 8px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--archive) 14%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--archive) 45%, transparent);
+  color: var(--archive);
+  font-weight: 500;
+  text-align: left;
+}
+
+.archive-button.active {
+  background: color-mix(in srgb, var(--archive) 28%, transparent);
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--archive) 90%, transparent);
+}
+
+.archive-button .count {
+  background: color-mix(in srgb, var(--archive) 25%, transparent);
+  color: var(--archive);
+}
+
+/* MARK: 그룹 화면 */
+
+.detail {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
+  background: var(--bg);
+}
+
+.group-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px 16px;
+  padding: 16px;
+}
+
+.group-header .title {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.group-header h1 {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.group-header .buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.link-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 38px;
+  padding: 8px 16px;
+}
+
+.link-list {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0 8px 48px;
+  outline: none;
+}
+
+.link-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 4px 8px;
+  border-radius: var(--radius-small);
+}
+
+/* 줄 사이 선은 글자가 시작하는 곳부터 (스위치 · 아이콘 다음) */
+.link-row + .link-row::before {
+  content: "";
+  position: absolute;
+  left: 80px;
+  right: 8px;
+  top: 0;
+  height: 0.5px;
+  background: color-mix(in srgb, var(--border) 55%, transparent);
+}
+
+.link-row.selected {
+  background: var(--accent-soft);
+}
+
+.link-row.selected::before,
+.link-row.selected + .link-row::before {
+  display: none;
+}
+
+.link-row.insert-before {
+  box-shadow: 0 -2px 0 var(--accent);
+}
+
+.link-row.insert-after {
+  box-shadow: 0 2px 0 var(--accent);
+}
+
+.link-row.dragging {
+  opacity: 0.45;
+}
+
+.link-row .texts {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
+  line-height: 1.3;
+}
+
+.link-row .url {
+  font-size: 11.5px;
+  color: var(--secondary);
+}
+
+.link-row .row-buttons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: none;
+}
+
+/* 오른쪽 아래: 버전 · 업데이트 */
+/* 오른쪽 아래: 버전과 설정 버튼 (테두리 없이 글자로) */
+.update-badge {
+  position: absolute;
+  right: 14px;
+  bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11.5px;
+  line-height: 18px;
+  color: var(--secondary);
+}
+
+.update-badge .progress {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.update-badge .version {
+  font-variant-numeric: tabular-nums;
+}
+
+.update-badge .link-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 18px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--secondary);
+  font-size: 11.5px;
+  cursor: pointer;
+}
+
+.update-badge .link-button:hover {
+  color: var(--text);
+}
+
+.update-badge .link-button.accent {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* MARK: 보관함 */
+
+.archive {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.archive .head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+}
+
+.archive .head .box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--secondary);
+  color: #fff;
+  flex: none;
+}
+
+.archive .head h1 {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.archive .body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 16px 16px 56px;
+}
+
+.archive .section-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.archive .section-title .fill {
+  flex: 1 1 auto;
+  align-self: stretch;
+}
+
+.archived-group {
+  margin: 4px 0;
+}
+
+.archived-group .group-card {
+  height: auto;
+  padding: 6px 8px;
+}
+
+.archived-page {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 8px;
+  min-width: 0;
+}
+
+.archived-page .texts {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.3;
+}
+
+/* MARK: 시트 안의 조각 */
+
+.tab-list {
+  min-height: 280px;
+  max-height: 460px;
+}
+
+.tab-line .texts {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
+  line-height: 1.3;
+}
+
+.tab-line .stripe {
+  width: 3px;
+  align-self: stretch;
+  margin: -2px 0;
+  flex: none;
+}
+
+.tab-line .fill {
+  flex: 1 1 auto;
+  align-self: stretch;
+  min-height: 26px;
+}
+
+/* 탭 그룹 가져오기: 닫힌 탭 그룹 구분 줄 */
+.list .line.closed-header {
+  gap: 6px;
+  min-height: 26px;
+  color: var(--secondary);
+  font-size: 11.5px;
+  font-weight: 600;
+  background: var(--hover);
+}
+
+/* 그룹 이름 줄의 '이 그룹에서 찾기' */
+.group-header .group-search {
+  flex: 0 1 210px;
+  min-width: 140px;
+}
+
+/* MARK: macOS 창 모양
+   제목 줄을 화면 위에 겹치고(신호등 버튼은 왼쪽 목록 안), 창 뒤에 반투명 바탕을 깐다 (windows.rs).
+   반투명은 둥글게 띄운 왼쪽 목록에서만 보이고, 나머지는 화면이 칠한다. */
+
+:root[data-platform="macos"] body,
+:root[data-platform="macos"] #app {
+  background: transparent;
+}
+
+:root[data-platform="macos"] .sidebar-frame {
+  --sidebar-gap: 8px;
+  padding: 8px 0 8px 8px;
+}
+
+:root[data-platform="macos"] .sidebar {
+  border-right: 0;
+  border-radius: 16px;
+  background: var(--sidebar-glass);
+  /* 위에서부터: 가장자리 선 · 그림자 · 목록 밖(여백)을 창 바탕색으로 칠하기 */
+  box-shadow: 0 0 0 0.5px var(--border), 0 1px 8px rgba(0, 0, 0, 0.07), 0 0 0 60px var(--bg);
+}
+
+:root[data-platform="macos"] .sidebar .profile-row {
+  min-height: 36px;
+  padding: 0 8px 0 78px;
+}
+
+.window-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  height: 50px;
+  padding: 0 20px;
+  border-bottom: 0.5px solid var(--border);
+  font-size: 15px;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--text) 80%, transparent);
+}
+
+/* 목록을 숨기면 신호등 버튼이 이 줄로 온다 */
+.window-title {
+  transition: padding-left 0.24s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.detail.sidebar-hidden .window-title {
+  padding-left: 84px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-frame,
+  .sidebar,
+  .window-title {
+    transition: none;
+  }
+}
+
+/* 그룹 동기화 */
+.sync-list {
+  max-height: 200px;
+}
+
+.callout-warning {
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--danger, #d92d20) 10%, transparent);
+  color: var(--text);
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+/* 키보드로 와 있는 섹션 머리줄 */
+.section-row.keyboard {
+  background: var(--accent-soft);
+  border-radius: var(--radius-small);
+}
+
+/* 보관함: 제목 줄을 눌러 펼치기 · 보관 그룹 안 페이지 줄 · 끌어 놓을 자리 */
+.archive .section-title.clickable {
+  cursor: default;
+}
+
+.archived-page-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 1px 4px 1px 64px;
+  border-radius: var(--radius-small);
+}
+
+.archived-page-row .row-buttons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  opacity: 0;
+}
+
+.archived-page-row:hover .row-buttons {
+  opacity: 1;
+}
+
+.archived-group.insert-before,
+.archived-page-row.insert-before,
+.archived-link-row.insert-before {
+  box-shadow: 0 -2px 0 var(--accent);
+}
+
+.archived-group.insert-after,
+.archived-page-row.insert-after,
+.archived-link-row.insert-after {
+  box-shadow: 0 2px 0 var(--accent);
+}
+
+.archived-group.drop-target .group-card,
+.archive-button.drop-target {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}

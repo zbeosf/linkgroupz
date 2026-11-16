@@ -1,0 +1,976 @@
+/* LinkGroupz 화면 공통 모양. 밝은 · 어두운 모드는 시스템 설정을 따른다. */
+
+:root {
+  color-scheme: light dark;
+
+  --bg: #ffffff;
+  --panel: #f4f4f6;
+  --sidebar: #ececef;
+  /* macOS 관리 창의 반투명 왼쪽 목록 위에 덮는 색 */
+  --sidebar-glass: rgba(250, 250, 250, 0.82);
+  /* macOS 메뉴바 창의 반투명 바탕 위에 덮는 색 */
+  --popover-glass: rgba(248, 248, 250, 0.6);
+  --card: #ffffff;
+  --field: #ffffff;
+  --text: #1d1d1f;
+  --secondary: #6b6b72;
+  --tertiary: #9a9aa2;
+  --border: rgba(0, 0, 0, 0.13);
+  --border-strong: rgba(0, 0, 0, 0.22);
+  --hover: rgba(0, 0, 0, 0.055);
+  /* 회색으로 채운 버튼 · 검색창 (macOS 기본 버튼처럼) */
+  --control: rgba(0, 0, 0, 0.08);
+  --control-hover: rgba(0, 0, 0, 0.12);
+  --control-active: rgba(0, 0, 0, 0.16);
+  --switch-off: rgba(120, 120, 128, 0.22);
+  /* 설정 창의 묶음 칸 (흰 바탕 위 옅은 회색, macOS 설정처럼) */
+  --group-fill: rgba(0, 0, 0, 0.03);
+  --chip: rgba(110, 110, 120, 0.15);
+  --accent: #0a6cff;
+  --accent-text: #ffffff;
+  --accent-soft: rgba(10, 108, 255, 0.16);
+  --highlight: rgba(255, 214, 0, 0.55);
+  --danger: #d6342a;
+  --ok: #2f9e55;
+  --warn: #c77700;
+  --archive: #33ad5c;
+  --overlay: rgba(0, 0, 0, 0.28);
+  --shadow: 0 10px 34px rgba(0, 0, 0, 0.22), 0 0 0 0.5px rgba(0, 0, 0, 0.18);
+
+  --radius: 10px;
+  --radius-small: 6px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1f1f22;
+    --panel: #27272a;
+    --sidebar: #2a2a2e;
+    --sidebar-glass: rgba(44, 44, 48, 0.45);
+    --popover-glass: rgba(38, 38, 42, 0.55);
+    --card: #323236;
+    --field: #1b1b1e;
+    --text: #f2f2f5;
+    --secondary: #a3a3ab;
+    --tertiary: #75757d;
+    --border: rgba(255, 255, 255, 0.14);
+    --border-strong: rgba(255, 255, 255, 0.26);
+    --hover: rgba(255, 255, 255, 0.075);
+    --control: rgba(255, 255, 255, 0.1);
+    --control-hover: rgba(255, 255, 255, 0.14);
+    --control-active: rgba(255, 255, 255, 0.19);
+    --switch-off: rgba(140, 140, 150, 0.32);
+    --group-fill: rgba(255, 255, 255, 0.05);
+    --chip: rgba(160, 160, 172, 0.2);
+    --accent: #4a93ff;
+    --accent-soft: rgba(74, 147, 255, 0.24);
+    --highlight: rgba(255, 200, 0, 0.42);
+    --danger: #ff6b61;
+    --ok: #4cc777;
+    --warn: #f0a63a;
+    --archive: #4cc777;
+    --overlay: rgba(0, 0, 0, 0.5);
+    --shadow: 0 10px 34px rgba(0, 0, 0, 0.5), 0 0 0 0.5px rgba(255, 255, 255, 0.16);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font: 13px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+  overflow: hidden;
+}
+
+input,
+button,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+.selectable {
+  user-select: text;
+  -webkit-user-select: text;
+  cursor: text;
+}
+
+.secondary {
+  color: var(--secondary);
+}
+
+.caption {
+  font-size: 11.5px;
+  color: var(--secondary);
+}
+
+.danger-text,
+.btn.plain.danger-text {
+  color: var(--danger);
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.icon {
+  display: inline-block;
+  flex: none;
+  vertical-align: middle;
+  fill: currentColor;
+}
+
+/* MARK: 버튼 */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  height: 26px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--radius-small);
+  background: var(--control);
+  white-space: nowrap;
+  cursor: default;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--control-hover);
+}
+
+.btn:active:not(:disabled) {
+  background: var(--control-active);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+}
+
+.btn:focus-visible,
+.field:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.btn.small {
+  height: 22px;
+  padding: 0 8px;
+  font-size: 12px;
+}
+
+.btn.primary {
+  background: var(--accent);
+  color: var(--accent-text);
+}
+
+.btn.primary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--accent) 88%, black);
+}
+
+.btn.destructive {
+  color: var(--danger);
+}
+
+.btn.block {
+  display: flex;
+  width: 100%;
+}
+
+/* 테두리 없는 아이콘 버튼 */
+.btn.plain {
+  height: 24px;
+  min-width: 24px;
+  padding: 0 4px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--secondary);
+}
+
+.btn.plain:hover:not(:disabled) {
+  background: var(--hover);
+  color: var(--text);
+}
+
+.btn.link {
+  height: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--accent);
+  font-size: 12px;
+}
+
+.btn.link:hover:not(:disabled) {
+  background: transparent;
+  text-decoration: underline;
+}
+
+/* MARK: 입력 */
+
+.field {
+  width: 100%;
+  height: 26px;
+  padding: 0 8px;
+  border: 0.5px solid var(--border-strong);
+  border-radius: var(--radius-small);
+  background: var(--field);
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.field::placeholder {
+  color: var(--tertiary);
+}
+
+select.field {
+  width: auto;
+  padding-right: 4px;
+}
+
+.search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search .icon.lens {
+  position: absolute;
+  left: 8px;
+  color: var(--secondary);
+  pointer-events: none;
+}
+
+/* 검색창: 캡슐 모양 */
+.search .field {
+  padding-left: 27px;
+  padding-right: 26px;
+  border: 1px solid var(--border);
+  border-radius: 99px;
+}
+
+.search .clear {
+  position: absolute;
+  right: 3px;
+}
+
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: default;
+  min-width: 0;
+}
+
+.check:disabled {
+  opacity: 0.45;
+}
+
+.check .box {
+  color: var(--secondary);
+}
+
+.check.on .box,
+.check.mixed .box {
+  color: var(--accent);
+}
+
+.chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--secondary);
+  flex: none;
+}
+
+.chevron:disabled {
+  opacity: 0.4;
+}
+
+.chevron:hover:not(:disabled) {
+  color: var(--text);
+}
+
+/* MARK: 작은 조각 */
+
+.dot {
+  display: inline-block;
+  flex: none;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 0.75px color-mix(in srgb, var(--text) 18%, transparent);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-width: 0;
+}
+
+.chip {
+  padding: 1px 6px;
+  border-radius: 99px;
+  background: var(--chip);
+  color: var(--secondary);
+  font-size: 11.5px;
+  white-space: nowrap;
+}
+
+.count {
+  padding: 1px 7px;
+  border-radius: 99px;
+  background: var(--chip);
+  color: var(--secondary);
+  font-size: 11.5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.group-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  overflow: hidden;
+  color: #fff;
+  box-shadow: inset 0 0 0 0.5px color-mix(in srgb, var(--text) 10%, transparent);
+}
+
+.group-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.browser-icon,
+.favicon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  color: var(--secondary);
+}
+
+.browser-icon img,
+.favicon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 99px;
+  color: #fff;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.divider {
+  height: 0.5px;
+  background: var(--border);
+  flex: none;
+}
+
+.vdivider {
+  width: 0.5px;
+  height: 14px;
+  margin: 0 6px;
+  background: var(--border-strong);
+  flex: none;
+}
+
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--border-strong);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  flex: none;
+}
+
+.spinner.mini {
+  width: 10px;
+  height: 10px;
+  border-width: 1.5px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 빈 상태 안내 */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 100%;
+  padding: 24px;
+  color: var(--secondary);
+  text-align: center;
+}
+
+.empty .title {
+  color: var(--text);
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.empty .big {
+  color: var(--tertiary);
+}
+
+/* MARK: 그룹 카드 (메뉴바 · 관리 창 사이드바) */
+
+.group-card {
+  --tint: var(--secondary);
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  height: 35px;
+  padding: 0 8px;
+  border-radius: var(--radius);
+  background: var(--card);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tint) 40%, transparent);
+  min-width: 0;
+}
+
+.group-card.hoverable:hover {
+  background: color-mix(in srgb, var(--tint) 8%, var(--card));
+}
+
+.group-card.selected {
+  background: color-mix(in srgb, var(--tint) 14%, var(--card));
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--tint) 90%, transparent);
+}
+
+.group-card.drop-target {
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+.group-card .names {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1 1 auto;
+  line-height: 1.25;
+}
+
+.group-card .name {
+  font-weight: 500;
+}
+
+.group-card .tags {
+  font-size: 11.5px;
+  color: var(--secondary);
+}
+
+.group-card .links-count {
+  font-size: 11.5px;
+  color: var(--secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* MARK: 메뉴 (오른쪽 클릭 · 버튼 메뉴) */
+
+.menu-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+}
+
+.menu {
+  position: fixed;
+  min-width: 190px;
+  max-width: 320px;
+  max-height: calc(100vh - 16px);
+  overflow-y: auto;
+  padding: 5px;
+  border-radius: 8px;
+  background: var(--card);
+  box-shadow: var(--shadow);
+}
+
+.menu .item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  height: 24px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 5px;
+  background: none;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.menu .item:disabled {
+  color: var(--tertiary);
+}
+
+.menu .item:hover:not(:disabled),
+.menu .item.open {
+  background: var(--accent);
+  color: var(--accent-text);
+}
+
+.menu .item.destructive:not(:hover):not(:disabled) {
+  color: var(--danger);
+}
+
+.menu .item .mark {
+  width: 14px;
+  flex: none;
+}
+
+.menu .item .label {
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.menu .separator {
+  height: 0.5px;
+  margin: 5px 8px;
+  background: var(--border);
+}
+
+/* MARK: 시트 (창 안의 대화 상자) */
+
+.sheet-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 44px 16px 16px;
+  background: var(--overlay);
+  overflow: auto;
+}
+
+.sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 100%;
+  padding: 20px;
+  border-radius: 12px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.sheet h2 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.sheet .actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.form {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  align-items: center;
+  gap: 10px 10px;
+}
+
+.form > label,
+.form > .label {
+  justify-self: end;
+  color: var(--secondary);
+  align-self: center;
+}
+
+.form > .label.top {
+  align-self: start;
+  padding-top: 3px;
+}
+
+.error-text {
+  color: var(--danger);
+  font-size: 11.5px;
+}
+
+.confirm {
+  width: 320px;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+}
+
+.confirm .title {
+  font-weight: 700;
+}
+
+.confirm .actions {
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  margin-top: 4px;
+}
+
+/* 목록 (가져오기 화면 등) */
+.list {
+  overflow-y: auto;
+  border: 0.5px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+}
+
+.list .line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 30px;
+  padding: 2px 10px 2px 4px;
+}
+
+.list .line + .line {
+  border-top: 0.5px solid color-mix(in srgb, var(--border) 60%, transparent);
+}
+
+/* 알림 한 줄 */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 60px;
+  z-index: 400;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.toast .notice {
+  padding: 6px 13px;
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--card) 92%, transparent);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+}
+
+.toast .error {
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--danger) 16%, var(--card));
+  font-size: 11.5px;
+  max-width: 70vw;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 2.5px solid transparent;
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--text) 24%, transparent);
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--text) 40%, transparent);
+  background-clip: content-box;
+}
+
+/* 검색어와 맞는 글자 */
+mark {
+  background: var(--highlight);
+  color: inherit;
+  border-radius: 2px;
+  padding: 0;
+}
+
+/* 프로필 바꾸기 버튼 (메뉴바 창 · 관리 창 · 설정 창) */
+.btn.profile-switcher {
+  flex: none;
+  gap: 4px;
+  max-width: 132px;
+}
+
+.btn.profile-switcher .truncate {
+  min-width: 0;
+}
+
+.btn.profile-switcher .group-icon {
+  flex: none;
+  margin-left: -3px;
+}
+
+/* 색 · 아이콘 고르기 (그룹 편집 · 설정의 프로필 편집) */
+.palette-row {
+  display: flex;
+  gap: 8px;
+}
+
+.palette-row button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: #fff;
+}
+
+.palette-row button .dot {
+  position: absolute;
+  inset: 0;
+}
+
+.palette-row button .icon {
+  position: relative;
+}
+
+.icon-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 30px);
+  gap: 6px;
+}
+
+.icon-grid button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: var(--chip);
+  color: var(--secondary);
+}
+
+.icon-grid button.selected {
+  color: #fff;
+}
+
+/* 작은 스위치 (페이지 줄의 '그룹 열 때 열기') */
+/* macOS 스위치처럼 손잡이가 길쭉한 캡슐 */
+.mini-switch {
+  position: relative;
+  flex: none;
+  width: 36px;
+  height: 18px;
+  padding: 0;
+  border: 0;
+  border-radius: 99px;
+  background: var(--switch-off);
+  transition: background 0.15s;
+}
+
+.mini-switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 22px;
+  height: 14px;
+  border-radius: 99px;
+  background: #fff;
+  box-shadow: 0 0.5px 1.5px rgba(0, 0, 0, 0.28);
+  transition: transform 0.15s;
+}
+
+.mini-switch.on {
+  background: var(--accent);
+}
+
+.mini-switch.on::after {
+  transform: translateX(10px);
+}
+
+/* 그룹을 열 때 열지 않는 페이지는 흐리게 */
+.link-off > :not(.mini-switch):not(.row-buttons) {
+  opacity: 0.4;
+}
+
+/* 검색할 곳 버튼: 일부만 켜 두면 강조 */
+.btn.scope-button {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  color: var(--secondary);
+}
+
+.btn.scope-button.on {
+  color: var(--accent);
+}
+
+/* MARK: Windows 모양
+   Windows 11 기본 앱(Fluent)처럼: 옅은 테두리가 있는 흰 버튼, 모서리 4px, 아래 선이 진한 입력칸, 동그란 손잡이 스위치.
+   macOS 는 위의 기본 모양(회색으로 채운 버튼 · 캡슐 검색창 · 길쭉한 손잡이 스위치)을 쓴다. */
+
+:root[data-platform="windows"] {
+  --bg: #ffffff;
+  --panel: #f3f3f3;
+  --sidebar: #f3f3f3;
+  --win-control: #fbfbfb;
+  --win-control-hover: #f6f6f6;
+  --win-control-active: #f5f5f5;
+  --win-stroke: rgba(0, 0, 0, 0.0578);
+  --win-stroke-bottom: rgba(0, 0, 0, 0.1622);
+  --win-field-bottom: rgba(0, 0, 0, 0.4458);
+  --win-switch-off: rgba(0, 0, 0, 0.6);
+  --accent: #005fb8;
+  --accent-soft: rgba(0, 95, 184, 0.14);
+  --radius: 8px;
+  --radius-small: 4px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-platform="windows"] {
+    --bg: #272727;
+    --panel: #202020;
+    --sidebar: #202020;
+    --win-control: rgba(255, 255, 255, 0.061);
+    --win-control-hover: rgba(255, 255, 255, 0.084);
+    --win-control-active: rgba(255, 255, 255, 0.033);
+    --win-stroke: rgba(255, 255, 255, 0.07);
+    --win-stroke-bottom: rgba(255, 255, 255, 0.05);
+    --win-field-bottom: rgba(255, 255, 255, 0.54);
+    --win-switch-off: rgba(255, 255, 255, 0.79);
+    --accent: #60cdff;
+    --accent-text: #000000;
+    --accent-soft: rgba(96, 205, 255, 0.2);
+  }
+}
+
+:root[data-platform="windows"] body {
+  font-family: "Segoe UI Variable Text", "Segoe UI", "Malgun Gothic", sans-serif;
+}
+
+:root[data-platform="windows"] .btn:not(.plain):not(.link):not(.primary) {
+  border: 1px solid var(--win-stroke);
+  border-bottom-color: var(--win-stroke-bottom);
+  background: var(--win-control);
+}
+
+:root[data-platform="windows"] .btn:not(.plain):not(.link):not(.primary):hover:not(:disabled) {
+  background: var(--win-control-hover);
+}
+
+:root[data-platform="windows"] .btn:not(.plain):not(.link):not(.primary):active:not(:disabled) {
+  background: var(--win-control-active);
+  color: var(--secondary);
+}
+
+:root[data-platform="windows"] .btn.primary {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom-color: rgba(0, 0, 0, 0.4);
+}
+
+/* 입력칸 · 검색창: 네모(모서리 4px), 아래 선이 진하고 고르면 강조색 두 줄 */
+:root[data-platform="windows"] .field,
+:root[data-platform="windows"] .search .field,
+:root[data-platform="windows"] .sidebar .search .field {
+  border: 1px solid var(--win-stroke);
+  border-bottom-color: var(--win-field-bottom);
+  border-radius: var(--radius-small);
+  background: var(--win-control);
+}
+
+:root[data-platform="windows"] .field:focus,
+:root[data-platform="windows"] .field:focus-visible {
+  outline: none;
+  background: var(--field);
+  border-bottom-color: var(--accent);
+  box-shadow: inset 0 -1px 0 var(--accent);
+}
+
+/* 스위치: 40×20, 꺼지면 테두리만 있고 손잡이가 동그랗다 */
+:root[data-platform="windows"] .mini-switch,
+:root[data-platform="windows"] .switch {
+  width: 40px;
+  height: 20px;
+  border: 1px solid var(--win-switch-off);
+  background: transparent;
+}
+
+:root[data-platform="windows"] .mini-switch::after,
+:root[data-platform="windows"] .switch::after {
+  top: 3px;
+  left: 3px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--win-switch-off);
+  box-shadow: none;
+}
+
+:root[data-platform="windows"] .mini-switch.on,
+:root[data-platform="windows"] .switch.on {
+  border-color: transparent;
+  background: var(--accent);
+}
+
+:root[data-platform="windows"] .mini-switch.on::after,
+:root[data-platform="windows"] .switch.on::after {
+  background: var(--accent-text);
+  transform: translateX(20px);
+}

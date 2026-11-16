@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 16">
+  <!-- 메뉴바 아이콘 (템플릿 이미지: macOS 가 밝은 · 어두운 메뉴바에 맞춰 색을 바꾼다). 그룹 카드 세 장. -->
+  <g fill="#000000">
+    <rect x="1" y="1.25" width="3.5" height="3.5" rx="1.1"/>
+    <rect x="6.25" y="1.75" width="10.75" height="2.5" rx="1.25"/>
+    <rect x="1" y="6.25" width="3.5" height="3.5" rx="1.1"/>
+    <rect x="6.25" y="6.75" width="8" height="2.5" rx="1.25"/>
+    <rect x="1" y="11.25" width="3.5" height="3.5" rx="1.1"/>
+    <rect x="6.25" y="11.75" width="10.75" height="2.5" rx="1.25"/>
+  </g>
+</svg>

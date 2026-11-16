@@ -1,0 +1,13 @@
+# 빌드 결과
+target/
+dist/
+# xtask 가 넣는 호스트 실행 파일 (Tauri 가 앱에 함께 넣는다)
+crates/app/binaries/
+# tauri-build 가 만드는 스키마
+crates/app/gen/
+
+# 릴리스 저장소 · 서명 공개 키 — 저장소에 올리지 않는다 (update-source.env.example 참고)
+update-source.env
+
+node_modules/
+.DS_Store

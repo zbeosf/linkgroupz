@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "LinkGroupz Tab Groups",
+  "version": "1.5.0",
+  "description": "LinkGroupz 앱에서 연 그룹을 브라우저 탭 그룹으로 묶고, 탭 · 탭 그룹 목록을 앱에 넘깁니다.",
+  "permissions": [
+    "tabs",
+    "tabGroups",
+    "webNavigation",
+    "nativeMessaging"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}

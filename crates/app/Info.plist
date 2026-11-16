@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- 메뉴바 앱: Dock 에 뜨지 않는다 -->
+    <key>LSUIElement</key>
+    <true/>
+    <!-- 확장 없이 열린 탭을 읽을 때(AppleScript) macOS 가 보여 주는 이유 -->
+    <key>NSAppleEventsUsageDescription</key>
+    <string>Chrome · Edge · Whale 에 열린 탭 목록을 읽어 그룹에 추가합니다.</string>
+</dict>
+</plist>

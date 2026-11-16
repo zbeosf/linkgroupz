@@ -1,0 +1,269 @@
+/* 메뉴바(트레이) 아이콘을 눌렀을 때 뜨는 작은 창 */
+
+html,
+body {
+  height: auto;
+}
+
+/* macOS 는 창 배경이 투명하다. 둥근 모서리를 여기서 그린다. */
+html[data-platform="macos"],
+html[data-platform="macos"] body {
+  background: transparent;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: var(--panel);
+  overflow: hidden;
+}
+
+/* 창 뒤의 반투명 바탕(windows.rs)이 비치게 칠한다. 모서리는 windows.rs 의 POPOVER_RADIUS 와 같게 */
+html[data-platform="macos"] #app {
+  border-radius: 12px;
+  background: var(--popover-glass);
+  box-shadow: inset 0 0 0 0.5px var(--border-strong);
+}
+
+/* 검색 줄: 원작처럼 테두리 · 바탕 없는 입력칸 */
+.popover-top .search .field {
+  border-color: transparent;
+  background: transparent;
+}
+
+.popover-top .search .field:focus-visible {
+  outline: none;
+}
+
+.popover-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px;
+}
+
+.popover-top .search {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.popover-top .btn.small {
+  height: 28px;
+}
+
+.popover-top .btn.icon-only {
+  min-width: 28px;
+  padding: 0 7px;
+}
+
+.popover-list {
+  min-height: 160px;
+  max-height: 420px;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+.popover-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 160px;
+  padding: 16px;
+  color: var(--secondary);
+  text-align: center;
+}
+
+.popover-empty b {
+  color: var(--text);
+  font-size: 14px;
+}
+
+.popover-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 1.5px 10px 1.5px 4px;
+}
+
+.popover-group .group-card {
+  flex: 1 1 auto;
+  padding: 0 6px;
+}
+
+/* 섹션 머리줄 (누르면 접기 · 펼치기) */
+.popover-section-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 10px 2px 12px;
+  padding: 3px 4px;
+  border-radius: 5px;
+  color: var(--secondary);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.popover-section-header:hover {
+  background: var(--hover);
+}
+
+.popover-section-header .truncate {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--text);
+}
+
+.popover-section-header .count {
+  font-variant-numeric: tabular-nums;
+}
+
+.popover-group.in-section {
+  padding-left: 16px;
+}
+
+.popover-link.in-section {
+  padding-left: 52px;
+}
+
+.popover-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px 5px 40px;
+  min-width: 0;
+}
+
+.popover-link:hover {
+  background: var(--accent-soft);
+}
+
+.popover-link .texts {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.popover-link .url {
+  font-size: 10.5px;
+  color: var(--secondary);
+}
+
+.popover-footer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px;
+}
+
+.popover-footer .btn {
+  height: 28px;
+}
+
+/* 떼어 놓은 창: 맨 위 띠를 끌어 옮긴다 */
+.popover {
+  position: relative;
+}
+
+.popover-grab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 14px;
+  margin-bottom: -8px;
+  cursor: grab;
+}
+
+.popover-grab::before {
+  content: "";
+  width: 36px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border-strong);
+  pointer-events: none;
+}
+
+html.detached .popover-top {
+  cursor: grab;
+}
+
+html.detached .popover-top .search,
+html.detached .popover-top .btn {
+  cursor: default;
+}
+
+.popover-footer .btn.icon-only {
+  min-width: 28px;
+  padding: 0 7px;
+}
+
+.popover-footer .btn.on {
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+/* 사용자가 크기를 정해 둔 경우: 창을 꽉 채우고 목록이 남는 자리를 차지한다 */
+html.fixed-size,
+html.fixed-size body {
+  height: 100%;
+}
+
+html.fixed-size #app {
+  height: 100%;
+}
+
+html.fixed-size .popover {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+html.fixed-size .popover-list,
+html.fixed-size .popover-empty {
+  flex: 1 1 0;
+  min-height: 0;
+  max-height: none;
+}
+
+/* 키보드로 고른 줄 (↑↓ 로 고르고 Enter 로 연다) */
+.popover-group .group-card.keyboard {
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+.popover-link.keyboard,
+.popover-section-header.keyboard {
+  background: var(--accent-soft);
+}
+
+.popover-top .btn.profile-switcher {
+  max-width: 108px;
+}
+
+/* 끌어서 옮기기: 놓을 자리 */
+.popover-group.insert-before,
+.popover-section-header.insert-before,
+.popover-link.insert-before,
+.popover-list-end.insert-before {
+  box-shadow: 0 -2px 0 var(--accent);
+}
+
+.popover-group.insert-after,
+.popover-section-header.insert-after,
+.popover-link.insert-after {
+  box-shadow: 0 2px 0 var(--accent);
+}
+
+.popover-group.drop-target .group-card,
+.popover-section-header.drop-target {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.popover-list-end {
+  min-height: 12px;
+}

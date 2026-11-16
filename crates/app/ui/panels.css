@@ -1,0 +1,295 @@
+/* 설정 · 시작 안내 · 바뀐 점 창 */
+
+/* macOS 설정처럼 흰 바탕에 옅은 회색 칸 */
+body {
+  background: var(--bg);
+  overflow-y: auto;
+}
+
+#app {
+  padding: 20px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+section + section {
+  margin-top: 18px;
+}
+
+section h3 {
+  margin: 0 0 6px 4px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: var(--group-fill);
+}
+
+.card .divider {
+  margin: 0 -14px;
+}
+
+.icon.ok {
+  color: var(--ok);
+}
+
+.segmented {
+  display: flex;
+  padding: 2px;
+  border-radius: 7px;
+  background: var(--chip);
+}
+
+.segmented button {
+  flex: 1 1 0;
+  height: 22px;
+  border: 0;
+  border-radius: 5px;
+  background: none;
+}
+
+/* 글 길이에 맞춰 늘어나는 것 (줄 오른쪽에 붙는 고르기, 영어처럼 글이 길어질 때) */
+.segmented.fit {
+  flex: none;
+  min-width: 200px;
+}
+
+.segmented.fit button {
+  flex: 1 0 auto;
+  padding: 0 12px;
+  white-space: nowrap;
+}
+
+.segmented button.selected {
+  background: var(--card);
+  box-shadow: 0 0.5px 2px rgba(0, 0, 0, 0.2);
+  font-weight: 600;
+}
+
+/* 켜기 · 끄기 스위치 (macOS 스위치처럼 손잡이가 길쭉한 캡슐, 페이지 줄의 .mini-switch 와 같은 모양) */
+.switch {
+  position: relative;
+  width: 36px;
+  height: 18px;
+  padding: 0;
+  border: 0;
+  border-radius: 99px;
+  background: var(--switch-off);
+  flex: none;
+  transition: background 0.15s;
+}
+
+.switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 22px;
+  height: 14px;
+  border-radius: 99px;
+  background: #fff;
+  box-shadow: 0 0.5px 1.5px rgba(0, 0, 0, 0.28);
+  transition: transform 0.15s;
+}
+
+.switch.on {
+  background: var(--accent);
+}
+
+.switch.on::after {
+  transform: translateX(10px);
+}
+
+.switch:disabled {
+  opacity: 0.45;
+}
+
+/* 시작 안내 */
+.welcome-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.welcome-head img,
+.whatsnew-head img {
+  flex: none;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px;
+  border-radius: var(--radius);
+  background: var(--chip);
+}
+
+.step + .step {
+  margin-top: 12px;
+}
+
+.step .number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-text);
+  font-weight: 700;
+  flex: none;
+}
+
+.step .content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.step .content > b:first-child {
+  font-size: 14px;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+/* 바뀐 점 */
+.whatsnew-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.whatsnew-head h1 {
+  font-size: 16px;
+}
+
+.changes {
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.changes .entry + .entry {
+  margin-top: 14px;
+}
+
+.changes .entry b {
+  font-size: 14px;
+}
+
+.changes ul {
+  margin: 6px 0 0;
+  padding-left: 18px;
+}
+
+.changes li + li {
+  margin-top: 4px;
+}
+
+/* 설정 → 프로필 목록 한 줄 */
+.profile-item {
+  gap: 8px;
+  min-height: 26px;
+}
+
+.profile-item .truncate {
+  min-width: 0;
+  max-width: 160px;
+}
+
+/* Windows: Windows 11 설정처럼 회색 바탕에 옅은 테두리의 흰 칸 */
+:root[data-platform="windows"] body {
+  background: var(--panel);
+}
+
+:root[data-platform="windows"] .card {
+  border: 1px solid var(--win-stroke);
+  border-radius: var(--radius-small);
+  background: var(--win-control);
+}
+
+/* 업데이트 진행 창 */
+.update-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.update-progress-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.progress-bar {
+  position: relative;
+  height: 6px;
+  border-radius: 99px;
+  background: var(--control);
+  overflow: hidden;
+}
+
+.progress-bar span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 99px;
+  background: var(--accent);
+  transition: width 0.2s;
+}
+
+.progress-bar.indeterminate span {
+  width: 30%;
+  animation: progress-slide 1.2s ease-in-out infinite;
+}
+
+@keyframes progress-slide {
+  from {
+    left: -30%;
+  }
+  to {
+    left: 100%;
+  }
+}
+
+/* Windows: Windows 11 진행 막대처럼 가늘고 모서리가 둥근 막대 */
+:root[data-platform="windows"] .progress-bar {
+  height: 4px;
+  background: var(--win-stroke-bottom);
+}
+
+/* 새 버전의 바뀐 점 */
+.update-notes {
+  max-height: 180px;
+  margin: 0;
+  padding: 10px 12px 10px 28px;
+  overflow-y: auto;
+  border-radius: var(--radius-small);
+  background: var(--group-fill);
+  line-height: 1.5;
+}
+
+.update-notes li + li {
+  margin-top: 4px;
+}
